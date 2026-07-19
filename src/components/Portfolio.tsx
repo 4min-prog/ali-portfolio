@@ -306,7 +306,7 @@ function LineSidebar({
         expanded ? "w-44" : "w-16 items-center"
       }`}
     >
-      <div className="absolute left-0 right-0 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-3">
+      <div className="flex justify-center pt-5">
         <a
           href="#top"
           className="grid h-9 w-9 place-items-center rounded-lg bg-foreground text-[11px] font-semibold tracking-wider text-background shadow-sm transition-transform duration-200 hover:scale-105"
@@ -317,7 +317,7 @@ function LineSidebar({
 
       <div
         ref={navRef}
-        className={`relative mt-20 flex flex-1 flex-col gap-0.5 ${
+        className={`relative mt-6 flex flex-1 flex-col gap-0.5 ${
           expanded ? "items-stretch px-3" : "items-center"
         }`}
       >
