@@ -120,25 +120,25 @@ function useTheme() {
 function Reveal({
   children,
   delay = 0,
-  as: Tag = "div",
   className,
 }: {
   children: React.ReactNode;
   delay?: number;
-  as?: React.ElementType;
   className?: string;
 }) {
-  const MotionTag = motion(Tag as React.ElementType);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
   return (
-    <MotionTag
+    <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
       transition={{ duration: 0.5, ease: "easeOut", delay }}
       className={className}
     >
       {children}
-    </MotionTag>
+    </motion.div>
   );
 }
 
