@@ -239,10 +239,10 @@ export default function Portfolio() {
         <Experience />
         <Education />
         <Skills />
+        <Gallery />
         <Certificates />
         <LanguagesSection />
         <Contact />
-        <Gallery />
         <Footer />
       </div>
 
@@ -791,7 +791,7 @@ function Certificates() {
     <section id="certificates" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="05" title="Sertifikalar" />
+          <SectionLabel index="06" title="Sertifikalar" />
         </Reveal>
 
         <Reveal delay={0.05}>
@@ -838,7 +838,7 @@ function Gallery() {
     <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="07" title="Galeri" />
+          <SectionLabel index="05" title="Galeri" />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
@@ -867,7 +867,7 @@ function LanguagesSection() {
     <section id="languages" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="06" title="Diller" />
+          <SectionLabel index="07" title="Diller" />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
@@ -939,7 +939,7 @@ function Contact() {
     <section id="contact" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="07" title="İletişim" />
+          <SectionLabel index="08" title="İletişim" />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
