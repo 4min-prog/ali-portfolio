@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
+import RotatingText from "./RotatingText";
 
 /* ---------- Data ---------- */
 
@@ -473,9 +474,7 @@ function Hero() {
               <h1 className="mt-8 text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
                 Ali Elömer.
                 <br />
-                <span className="text-muted-foreground">İlahiyat mezunu,</span>
-                <br />
-                idari işler & tercümanlık.
+                <RotatingText />.
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
