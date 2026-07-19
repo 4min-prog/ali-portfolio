@@ -17,6 +17,7 @@ import {
   Star,
   Award,
   Languages,
+  Image,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
@@ -32,6 +33,7 @@ const NAV: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "certificates", label: "Sertifikalar", icon: Award },
   { id: "languages", label: "Diller", icon: Languages },
   { id: "contact", label: "İletişim", icon: Mail },
+  { id: "gallery", label: "Galeri", icon: Image },
 ];
 
 const EXPERIENCE = [
@@ -101,33 +103,41 @@ const CAPABILITIES = [
 const CERTIFICATES = [
   {
     title: "Excel Temel Beceriler",
-    issuer: "BTK Akademi",
+    issuer: "Online Eğitim",
     pdf: "/certificates/Microsoft_Excel_Temelleri_Sertifika (ali).pdf",
-    images: [
-      "/photos/cert-excel-1.jpg",
-      "/photos/cert-excel-2.jpg",
-      "/photos/cert-excel-3.jpg",
-      "/photos/cert-excel-4.jpg",
-    ],
   },
   {
     title: "PowerPoint Temel Beceriler",
-    issuer: "BTK Akademi",
+    issuer: "Online Eğitim",
     pdf: "/certificates/Microsoft_PowerPoint_Sertifika.pdf",
-    images: ["/photos/cert-powerpoint-1.jpg", "/photos/cert-powerpoint-2.jpg"],
   },
   {
     title: "Word Temel Beceriler",
-    issuer: "BTK Akademi",
+    issuer: "Online Eğitim",
     pdf: "/certificates/Microsoft_Word_Temelleri_Sertifika..ali el omer.pdf",
-    images: ["/photos/cert-word-1.jpg", "/photos/cert-word-2.jpg"],
   },
   {
     title: "Canva Uygulamalı",
-    issuer: "BTK Akademi",
+    issuer: "Online Eğitim",
     pdf: "/certificates/Uygulamal%C4%B1_Canva_Sertifika%20(ali).pdf",
-    images: ["/photos/cert-canva-1.jpg", "/photos/cert-canva-2.jpg"],
   },
+];
+
+const GALLERY = [
+  "/photos/profile-1.jpg",
+  "/photos/profile-2.jpg",
+  "/photos/profile-3.jpg",
+  "/photos/profile-4.jpg",
+  "/photos/cert-excel-1.jpg",
+  "/photos/cert-excel-2.jpg",
+  "/photos/cert-excel-3.jpg",
+  "/photos/cert-excel-4.jpg",
+  "/photos/cert-powerpoint-1.jpg",
+  "/photos/cert-powerpoint-2.jpg",
+  "/photos/cert-word-1.jpg",
+  "/photos/cert-word-2.jpg",
+  "/photos/cert-canva-1.jpg",
+  "/photos/cert-canva-2.jpg",
 ];
 
 const LANGUAGES = [
@@ -232,6 +242,7 @@ export default function Portfolio() {
         <Certificates />
         <LanguagesSection />
         <Contact />
+        <Gallery />
         <Footer />
       </div>
 
@@ -786,47 +797,61 @@ function Certificates() {
         <Reveal delay={0.05}>
           <div className="mt-14 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <h2 className="max-w-xl text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-              BTK Akademi eğitim sertifikaları.
+              Online eğitim sertifikaları.
             </h2>
             <span className="text-sm text-muted-foreground">4 sertifika</span>
           </div>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
           {CERTIFICATES.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.05}>
-              <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:bg-accent">
-                <div className="relative h-48 overflow-hidden bg-muted">
-                  {c.images[0] && (
-                    <img
-                      src={c.images[0]}
-                      alt={c.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
-                </div>
-                <div className="flex flex-1 flex-col justify-between p-6">
-                  <div>
-                    <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                      {c.issuer}
-                    </div>
-                    <h3 className="mt-2 text-lg font-semibold tracking-tight">{c.title}</h3>
+              <article className="flex items-center justify-between rounded-xl border border-border bg-card p-6 transition-colors hover:bg-accent">
+                <div>
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                    {c.issuer}
                   </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Tamamlandı</span>
-                    <a
-                      href={c.pdf}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:underline"
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                      PDF İndir
-                    </a>
-                  </div>
+                  <h3 className="mt-2 text-lg font-semibold tracking-tight">{c.title}</h3>
                 </div>
+                <a
+                  href={c.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-4 inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-4 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  PDF
+                </a>
               </article>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Gallery: photo grid ---------- */
+
+function Gallery() {
+  return (
+    <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        <Reveal>
+          <SectionLabel index="07" title="Galeri" />
+        </Reveal>
+
+        <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+          {GALLERY.map((src, i) => (
+            <Reveal key={src} delay={i * 0.03}>
+              <div className="group aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+                <img
+                  src={src}
+                  alt={`Galeri ${i + 1}`}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+              </div>
             </Reveal>
           ))}
         </div>
