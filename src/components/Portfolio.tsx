@@ -306,16 +306,18 @@ function LineSidebar({
         expanded ? "w-44" : "w-16 items-center"
       }`}
     >
-      <a
-        href="#top"
-        className="mt-5 grid h-8 w-8 place-items-center rounded-md bg-foreground text-[11px] font-semibold tracking-wider text-background"
-      >
-        AE
-      </a>
+      <div className="absolute left-0 right-0 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-3">
+        <a
+          href="#top"
+          className="grid h-9 w-9 place-items-center rounded-lg bg-foreground text-[11px] font-semibold tracking-wider text-background shadow-sm transition-transform duration-200 hover:scale-105"
+        >
+          AE
+        </a>
+      </div>
 
       <div
         ref={navRef}
-        className={`relative mt-8 flex flex-1 flex-col gap-1 ${
+        className={`relative mt-20 flex flex-1 flex-col gap-0.5 ${
           expanded ? "items-stretch px-3" : "items-center"
         }`}
       >
@@ -350,17 +352,21 @@ function LineSidebar({
               href={`#${n.id}`}
               onMouseEnter={() => onItemEnter(n.id)}
               onMouseLeave={onItemLeave}
-              className={`flex items-center rounded-md text-sm font-medium transition-colors ${
-                expanded ? "h-8 gap-3 pl-5 pr-2" : "h-8 w-8 justify-center"
+              className={`group flex items-center rounded-lg text-sm font-medium transition-all duration-300 ease-out ${
+                expanded ? "h-9 gap-3 pl-5 pr-2" : "h-9 w-9 justify-center"
               } ${
                 activeId === n.id
                   ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               }`}
             >
-              <Icon className="h-4 w-4 shrink-0" />
+              <Icon
+                className={`h-4 w-4 shrink-0 transition-transform duration-300 ease-out ${
+                  expanded ? "" : "group-hover:scale-110"
+                }`}
+              />
               <span
-                className={`whitespace-nowrap transition-all duration-300 ${
+                className={`whitespace-nowrap transition-all duration-300 ease-out ${
                   expanded
                     ? "translate-x-0 opacity-100"
                     : "pointer-events-none absolute -translate-x-2 opacity-0"
@@ -373,7 +379,11 @@ function LineSidebar({
         })}
       </div>
 
-      <div className={`mb-5 flex gap-2 ${expanded ? "flex-row px-3" : "flex-col items-center"}`}>
+      <div
+        className={`mb-5 flex gap-2 ${
+          expanded ? "flex-row px-3" : "flex-col items-center"
+        }`}
+      >
         <button
           onClick={toggle}
           aria-label="Tema değiştir"
