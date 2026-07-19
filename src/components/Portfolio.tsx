@@ -229,7 +229,7 @@ function LineSidebar({
   toggle: () => void;
   activeId: string;
 }) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
   const [activeLinePos, setActiveLinePos] = useState<number | null>(null);
   const [hoverLinePos, setHoverLinePos] = useState<number | null>(null);
   const [showHoverLine, setShowHoverLine] = useState(false);
@@ -252,13 +252,12 @@ function LineSidebar({
       const pos = getLinePosition(activeId);
       setActiveLinePos(pos);
     }
-  }, [activeId, getLinePosition]);
+  }, [activeId, getLinePosition, expanded]);
 
   const onItemEnter = useCallback(
     (id: string) => {
       clearTimeout(hoverTimeoutRef.current);
       clearTimeout(hoverDelayRef.current);
-      setHoveredId(id);
       const pos = getLinePosition(id);
       setHoverLinePos(pos);
       hoverDelayRef.current = setTimeout(() => setShowHoverLine(true), 120);
@@ -270,8 +269,19 @@ function LineSidebar({
     clearTimeout(hoverDelayRef.current);
     hoverTimeoutRef.current = setTimeout(() => {
       setShowHoverLine(false);
-      setHoveredId(null);
     }, 80);
+  }, []);
+
+  const onSidebarEnter = useCallback(() => {
+    clearTimeout(hoverTimeoutRef.current);
+    setExpanded(true);
+  }, []);
+
+  const onSidebarLeave = useCallback(() => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setExpanded(false);
+      setShowHoverLine(false);
+    }, 150);
   }, []);
 
   useEffect(() => {
@@ -282,7 +292,13 @@ function LineSidebar({
   }, []);
 
   return (
-    <header className="fixed inset-y-0 left-0 z-40 hidden w-16 flex-col items-center border-r border-border bg-background/85 backdrop-blur lg:flex">
+    <header
+      onMouseEnter={onSidebarEnter}
+      onMouseLeave={onSidebarLeave}
+      className={`fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-border bg-background/85 backdrop-blur transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] lg:flex ${
+        expanded ? "w-44" : "w-16 items-center"
+      }`}
+    >
       <a
         href="#top"
         className="mt-5 grid h-8 w-8 place-items-center rounded-md bg-foreground text-[11px] font-semibold tracking-wider text-background"
@@ -290,7 +306,12 @@ function LineSidebar({
         AE
       </a>
 
-      <div ref={navRef} className="relative mt-8 flex flex-1 flex-col items-center gap-1">
+      <div
+        ref={navRef}
+        className={`relative mt-8 flex flex-1 flex-col gap-1 ${
+          expanded ? "items-stretch px-3" : "items-center"
+        }`}
+      >
         <div
           className="pointer-events-none absolute left-0 w-0.5 rounded-full bg-foreground transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
           style={{
@@ -320,27 +341,37 @@ function LineSidebar({
             href={`#${n.id}`}
             onMouseEnter={() => onItemEnter(n.id)}
             onMouseLeave={onItemLeave}
-            className={`relative flex h-8 w-8 items-center justify-center rounded-md text-[11px] font-medium transition-colors ${
+            className={`flex items-center rounded-md text-sm font-medium transition-colors ${
+              expanded ? "h-8 gap-3 pl-5 pr-2" : "h-8 w-8 justify-center text-[11px]"
+            } ${
               activeId === n.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
-            title={n.label}
           >
-            {n.label.charAt(0)}
+            <span className={expanded ? "shrink-0" : ""}>{n.label.charAt(0)}</span>
+            <span
+              className={`whitespace-nowrap transition-all duration-300 ${
+                expanded
+                  ? "translate-x-0 opacity-100"
+                  : "pointer-events-none absolute -translate-x-2 opacity-0"
+              }`}
+            >
+              {n.label}
+            </span>
           </a>
         ))}
       </div>
 
-      <div className="mb-5 flex flex-col items-center gap-2">
+      <div className={`mb-5 flex gap-2 ${expanded ? "flex-row px-3" : "flex-col items-center"}`}>
         <button
           onClick={toggle}
           aria-label="Tema değiştir"
-          className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
         >
           {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
         </button>
         <a
           href="#contact"
-          className="grid h-8 w-8 place-items-center rounded-md bg-foreground text-background transition-opacity hover:opacity-90"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-foreground text-background transition-opacity hover:opacity-90"
           title="İletişim"
         >
           <Mail className="h-3.5 w-3.5" />
