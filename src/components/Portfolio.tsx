@@ -11,19 +11,26 @@ import {
   Moon,
   Sun,
   Check,
+  User,
+  Briefcase,
+  GraduationCap,
+  Star,
+  Award,
+  Languages,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
 
 /* ---------- Data ---------- */
 
-const NAV = [
-  { id: "about", label: "Hakkımda" },
-  { id: "experience", label: "Deneyim" },
-  { id: "education", label: "Eğitim" },
-  { id: "skills", label: "Yetenekler" },
-  { id: "certificates", label: "Sertifikalar" },
-  { id: "languages", label: "Diller" },
-  { id: "contact", label: "İletişim" },
+const NAV: { id: string; label: string; icon: LucideIcon }[] = [
+  { id: "about", label: "Hakkımda", icon: User },
+  { id: "experience", label: "Deneyim", icon: Briefcase },
+  { id: "education", label: "Eğitim", icon: GraduationCap },
+  { id: "skills", label: "Yetenekler", icon: Star },
+  { id: "certificates", label: "Sertifikalar", icon: Award },
+  { id: "languages", label: "Diller", icon: Languages },
+  { id: "contact", label: "İletişim", icon: Mail },
 ];
 
 const EXPERIENCE = [
@@ -332,33 +339,38 @@ function LineSidebar({
           }}
         />
 
-        {NAV.map((n) => (
-          <a
-            key={n.id}
-            ref={(el) => {
-              if (el) itemRefs.current[n.id] = el;
-            }}
-            href={`#${n.id}`}
-            onMouseEnter={() => onItemEnter(n.id)}
-            onMouseLeave={onItemLeave}
-            className={`flex items-center rounded-md text-sm font-medium transition-colors ${
-              expanded ? "h-8 gap-3 pl-5 pr-2" : "h-8 w-8 justify-center text-[11px]"
-            } ${
-              activeId === n.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <span className={expanded ? "shrink-0" : ""}>{n.label.charAt(0)}</span>
-            <span
-              className={`whitespace-nowrap transition-all duration-300 ${
-                expanded
-                  ? "translate-x-0 opacity-100"
-                  : "pointer-events-none absolute -translate-x-2 opacity-0"
+        {NAV.map((n) => {
+          const Icon = n.icon;
+          return (
+            <a
+              key={n.id}
+              ref={(el) => {
+                if (el) itemRefs.current[n.id] = el;
+              }}
+              href={`#${n.id}`}
+              onMouseEnter={() => onItemEnter(n.id)}
+              onMouseLeave={onItemLeave}
+              className={`flex items-center rounded-md text-sm font-medium transition-colors ${
+                expanded ? "h-8 gap-3 pl-5 pr-2" : "h-8 w-8 justify-center"
+              } ${
+                activeId === n.id
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {n.label}
-            </span>
-          </a>
-        ))}
+              <Icon className="h-4 w-4 shrink-0" />
+              <span
+                className={`whitespace-nowrap transition-all duration-300 ${
+                  expanded
+                    ? "translate-x-0 opacity-100"
+                    : "pointer-events-none absolute -translate-x-2 opacity-0"
+                }`}
+              >
+                {n.label}
+              </span>
+            </a>
+          );
+        })}
       </div>
 
       <div className={`mb-5 flex gap-2 ${expanded ? "flex-row px-3" : "flex-col items-center"}`}>
