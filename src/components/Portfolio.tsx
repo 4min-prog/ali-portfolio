@@ -236,7 +236,9 @@ function TopBar({
   return (
     <header
       className={`fixed inset-x-0 top-0 z-40 border-b transition-colors ${
-        scrolled ? "border-border bg-background/85 backdrop-blur" : "border-transparent bg-transparent"
+        scrolled
+          ? "border-border bg-background/85 backdrop-blur"
+          : "border-transparent bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6">
@@ -308,9 +310,8 @@ function Hero() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                Eğitim, idari işler ve tercümanlık alanlarında deneyimli;
-                öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu
-                bir profesyonel.
+                Eğitim, idari işler ve tercümanlık alanlarında deneyimli; öğrenmeye açık, sorumluluk
+                sahibi ve ekip çalışmasına uyumlu bir profesyonel.
               </p>
             </Reveal>
             <Reveal delay={0.15}>
@@ -364,9 +365,7 @@ function Hero() {
               { k: "Alan", v: "Eğitim · İdari" },
             ].map((s) => (
               <div key={s.k} className="bg-card p-6">
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                  {s.k}
-                </div>
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">{s.k}</div>
                 <div className="mt-2 text-2xl font-semibold tracking-tight">{s.v}</div>
               </div>
             ))}
@@ -398,17 +397,15 @@ function About() {
           <div className="space-y-8 md:col-span-7">
             <Reveal delay={0.1}>
               <p className="text-base leading-[1.75] text-foreground/85 sm:text-lg">
-                Eğitim sektöründeki stajyerlik ve öğreticilik tecrübemi,
-                sanayide edindiğim iş disipliniyle birleştiren bir İlahiyat
-                mezunuyum. Sekreterlik, tercümanlık, temel ofis uygulamaları
-                ve Canva tasarımları konusunda bilgi sahibiyim.
+                Eğitim sektöründeki stajyerlik ve öğreticilik tecrübemi, sanayide edindiğim iş
+                disipliniyle birleştiren bir İlahiyat mezunuyum. Sekreterlik, tercümanlık, temel
+                ofis uygulamaları ve Canva tasarımları konusunda bilgi sahibiyim.
               </p>
             </Reveal>
             <Reveal delay={0.15}>
               <p className="text-base leading-[1.75] text-muted-foreground sm:text-lg">
-                Öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu
-                bir yapıya sahibim. Kurumsal işleyişe kolay adapte olur,
-                doküman süreçlerini titizlikle yürütürüm.
+                Öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu bir yapıya sahibim.
+                Kurumsal işleyişe kolay adapte olur, doküman süreçlerini titizlikle yürütürüm.
               </p>
             </Reveal>
             <Reveal delay={0.2}>
@@ -534,8 +531,8 @@ function Skills() {
             </Reveal>
             <Reveal delay={0.05}>
               <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
-                Günlük iş akışlarında güvenle kullandığım araçlar ve kurumsal
-                iletişimde geliştirdiğim yetkinlikler.
+                Günlük iş akışlarında güvenle kullandığım araçlar ve kurumsal iletişimde
+                geliştirdiğim yetkinlikler.
               </p>
             </Reveal>
           </div>
@@ -644,13 +641,7 @@ function LanguagesSection() {
   );
 }
 
-function LanguageRow({
-  l,
-  delay,
-}: {
-  l: (typeof LANGUAGES)[number];
-  delay: number;
-}) {
+function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: number }) {
   const ref = useRef<HTMLLIElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
@@ -680,8 +671,18 @@ function Contact() {
   const items = [
     { icon: MapPin, k: "Konum", v: "Gaziantep, Türkiye", href: undefined },
     { icon: Phone, k: "Telefon", v: "+90 538 587 77 39", href: "tel:+905385877739" },
-    { icon: Mail, k: "E-posta", v: "alielomer450@gmail.com", href: "mailto:alielomer450@gmail.com" },
-    { icon: Linkedin, k: "LinkedIn", v: "linkedin.com/in/aliomerr", href: "https://linkedin.com/in/aliomerr" },
+    {
+      icon: Mail,
+      k: "E-posta",
+      v: "alielomer450@gmail.com",
+      href: "mailto:alielomer450@gmail.com",
+    },
+    {
+      icon: Linkedin,
+      k: "LinkedIn",
+      v: "linkedin.com/in/aliomerr",
+      href: "https://linkedin.com/in/aliomerr",
+    },
   ];
 
   return (
@@ -702,8 +703,8 @@ function Contact() {
             </Reveal>
             <Reveal delay={0.05}>
               <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-                Eğitim, idari işler, tercümanlık veya ofis yönetimi gerektiren
-                pozisyonlar için mesajlarınıza kısa sürede dönüş sağlıyorum.
+                Eğitim, idari işler, tercümanlık veya ofis yönetimi gerektiren pozisyonlar için
+                mesajlarınıza kısa sürede dönüş sağlıyorum.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
