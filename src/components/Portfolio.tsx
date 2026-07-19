@@ -99,9 +99,35 @@ const CAPABILITIES = [
 ];
 
 const CERTIFICATES = [
-  { title: "Excel Temel Beceriler", issuer: "BTK Akademi" },
-  { title: "PowerPoint Temel Beceriler", issuer: "BTK Akademi" },
-  { title: "Canva Uygulamalı", issuer: "BTK Akademi" },
+  {
+    title: "Excel Temel Beceriler",
+    issuer: "BTK Akademi",
+    pdf: "/certificates/Microsoft_Excel_Temelleri_Sertifika (ali).pdf",
+    images: [
+      "/photos/cert-excel-1.jpg",
+      "/photos/cert-excel-2.jpg",
+      "/photos/cert-excel-3.jpg",
+      "/photos/cert-excel-4.jpg",
+    ],
+  },
+  {
+    title: "PowerPoint Temel Beceriler",
+    issuer: "BTK Akademi",
+    pdf: "/certificates/Microsoft_PowerPoint_Sertifika.pdf",
+    images: ["/photos/cert-powerpoint-1.jpg", "/photos/cert-powerpoint-2.jpg"],
+  },
+  {
+    title: "Word Temel Beceriler",
+    issuer: "BTK Akademi",
+    pdf: "/certificates/Microsoft_Word_Temelleri_Sertifika..ali el omer.pdf",
+    images: ["/photos/cert-word-1.jpg", "/photos/cert-word-2.jpg"],
+  },
+  {
+    title: "Canva Uygulamalı",
+    issuer: "BTK Akademi",
+    pdf: "/certificates/Uygulamal%C4%B1_Canva_Sertifika%20(ali).pdf",
+    images: ["/photos/cert-canva-1.jpg", "/photos/cert-canva-2.jpg"],
+  },
 ];
 
 const LANGUAGES = [
@@ -153,10 +179,12 @@ function Reveal({
 
 function SectionLabel({ index, title }: { index: string; title: string }) {
   return (
-    <div className="flex items-baseline gap-4 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-      <span className="tabular-nums text-foreground/40">{index}</span>
-      <span className="h-px flex-1 bg-border" />
-      <span>{title}</span>
+    <div className="flex flex-col items-center gap-2 text-center">
+      <span className="text-xs tabular-nums uppercase tracking-[0.18em] text-muted-foreground/50">
+        {index}
+      </span>
+      <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+      <span className="mt-1 h-px w-12 bg-border" />
     </div>
   );
 }
@@ -555,21 +583,31 @@ function About() {
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
           <Reveal delay={0.05} className="md:col-span-5">
-            <h2 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-              Eğitim disiplini ile
-              <br />
-              kurumsal iş anlayışı.
-            </h2>
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-border bg-card">
+              <img
+                src="/photos/profile-1.jpg"
+                alt="Ali Elömer"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+            </div>
           </Reveal>
           <div className="space-y-8 md:col-span-7">
-            <Reveal delay={0.1}>
+            <Reveal delay={0.08}>
+              <h2 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
+                Eğitim disiplini ile
+                <br />
+                kurumsal iş anlayışı.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.12}>
               <p className="text-base leading-[1.75] text-foreground/85 sm:text-lg">
                 Eğitim sektöründeki stajyerlik ve öğreticilik tecrübemi, sanayide edindiğim iş
                 disipliniyle birleştiren bir İlahiyat mezunuyum. Sekreterlik, tercümanlık, temel
                 ofis uygulamaları ve Canva tasarımları konusunda bilgi sahibiyim.
               </p>
             </Reveal>
-            <Reveal delay={0.15}>
+            <Reveal delay={0.16}>
               <p className="text-base leading-[1.75] text-muted-foreground sm:text-lg">
                 Öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu bir yapıya sahibim.
                 Kurumsal işleyişe kolay adapte olur, doküman süreçlerini titizlikle yürütürüm.
@@ -750,23 +788,43 @@ function Certificates() {
             <h2 className="max-w-xl text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
               BTK Akademi eğitim sertifikaları.
             </h2>
-            <span className="text-sm text-muted-foreground">3 sertifika</span>
+            <span className="text-sm text-muted-foreground">4 sertifika</span>
           </div>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
           {CERTIFICATES.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.05}>
-              <article className="flex h-full flex-col justify-between bg-card p-8 transition-colors hover:bg-accent">
-                <div>
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                    {c.issuer}
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold tracking-tight">{c.title}</h3>
+              <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:bg-accent">
+                <div className="relative h-48 overflow-hidden bg-muted">
+                  {c.images[0] && (
+                    <img
+                      src={c.images[0]}
+                      alt={c.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
                 </div>
-                <div className="mt-10 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Tamamlandı</span>
-                  <ArrowUpRight className="h-4 w-4" />
+                <div className="flex flex-1 flex-col justify-between p-6">
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                      {c.issuer}
+                    </div>
+                    <h3 className="mt-2 text-lg font-semibold tracking-tight">{c.title}</h3>
+                  </div>
+                  <div className="mt-6 flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">Tamamlandı</span>
+                    <a
+                      href={c.pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:underline"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      PDF İndir
+                    </a>
+                  </div>
                 </div>
               </article>
             </Reveal>

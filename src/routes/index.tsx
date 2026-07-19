@@ -26,8 +26,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:title", content: "Ali Elömer — İlahiyat Mezunu" },
       {
         name: "twitter:description",
-        content:
-          "Eğitim, idari işler ve tercümanlık alanlarında deneyimli İlahiyat mezunu.",
+        content: "Eğitim, idari işler ve tercümanlık alanlarında deneyimli İlahiyat mezunu.",
       },
       { name: "twitter:image", content: "/og-image.svg" },
     ],
