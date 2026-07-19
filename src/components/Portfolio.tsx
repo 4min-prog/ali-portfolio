@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
+import WaveRibbon from "./WaveRibbon";
 
 /* ---------- Data ---------- */
 
@@ -196,6 +197,7 @@ export default function Portfolio() {
 
       <div className="lg:pl-16">
         <Hero />
+        <WaveRibbon />
         <About />
         <Experience />
         <Education />
