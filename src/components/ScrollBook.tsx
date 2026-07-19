@@ -1,255 +1,299 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
-const PAGES = [
-  {
-    title: "İlahiyat",
-    subtitle: "Lisans Derecesi",
-    body: "Siirt Üniversitesi\n2026",
-    accent: true,
-  },
-  {
-    title: "Yazma Eser\nMetin Analizi",
-    subtitle: "Uzman Yardımcılığı",
-    body: "El yazması eserlerin okunması,\ntranskripsiyonu ve içerik analizi.\nArapça kaynak taraması.",
-  },
-  {
-    title: "Tercümanlık",
-    subtitle: "TR ↔ AR",
-    body: "Türkçe ve Arapça arasında\nakıcı yazılı ve sözlü çeviri.\nKurumsal iletişimde deneyim.",
-  },
-  {
-    title: "Ofis\nUygulamaları",
-    subtitle: "Microsoft Office & Canva",
-    body: "Word, Excel, PowerPoint\nve Canva tasarım araçları.\nİleri düzey kullanıcı.",
-  },
-  {
-    title: "BTK Akademi",
-    subtitle: "Sertifikalar",
-    body: "Excel Temel Beceriler\nPowerPoint Temel Beceriler\nCanva Uygulamalı",
-  },
-];
-
-const PAGE_COUNT = PAGES.length;
-
-function BookPage({
-  index,
-  progress,
-  page,
-}: {
-  index: number;
-  progress: ReturnType<typeof useTransform<number, number>>;
-  page: (typeof PAGES)[number];
-}) {
-  const rotateY = useTransform(progress, [0, 1], [0, -180]);
-  const pageRotate = useTransform(rotateY, (v) => (v * (index + 1)) / PAGE_COUNT);
-  const springRotate = useSpring(pageRotate, {
-    mass: 0.8,
-    damping: 20,
-    stiffness: 80,
-  });
-
-  const shadowOpacity = useTransform(springRotate, [-120, 0], [0.25, 0]);
-  const springShadow = useSpring(shadowOpacity, { stiffness: 60, damping: 20 });
-
-  return (
-    <motion.div
-      className="absolute top-0 left-0 h-full origin-left"
-      style={{
-        width: "50%",
-        zIndex: PAGE_COUNT - index,
-        rotateY: springRotate,
-        transformStyle: "preserve-3d",
-      }}
-    >
-      {/* Front face */}
-      <div
-        className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-r-lg border border-white/20 p-6 sm:p-8"
-        style={{
-          backfaceVisibility: "hidden",
-          background:
-            index === 0
-              ? "linear-gradient(135deg, #0F4C81 0%, #0a3560 100%)"
-              : index === PAGES.length - 1
-                ? "linear-gradient(135deg, #f8f6f3 0%, #efe9df 100%)"
-                : `linear-gradient(145deg, #faf8f5 0%, #f2ece3 100%)`,
-          boxShadow: "inset -4px 0 8px rgba(0,0,0,0.04)",
-        }}
-      >
-        {page.accent ? (
-          <>
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-lg bg-white/15 text-sm font-bold text-white/90">
-                AE
-              </div>
-              <div className="text-[10px] uppercase tracking-widest text-white/40">Portföy</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
-                {page.title}
-              </div>
-              <div className="mt-2 text-sm text-white/60">{page.subtitle}</div>
-              <div className="mt-4 h-px w-12 bg-white/20" />
-              <pre className="mt-4 whitespace-pre-wrap text-xs leading-relaxed text-white/50">
-                {page.body}
-              </pre>
-            </div>
-            <div className="text-[10px] text-white/30">2026</div>
-          </>
-        ) : (
-          <>
-            <div>
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground/50">
-                {page.subtitle}
-              </div>
-              <div className="mt-3 text-xl font-semibold leading-snug tracking-tight text-foreground sm:text-2xl">
-                {page.title}
-              </div>
-            </div>
-            <div>
-              <div className="mb-4 h-px w-8 bg-border" />
-              <pre className="whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
-                {page.body}
-              </pre>
-            </div>
-            <div className="text-[10px] text-muted-foreground/40">Ali Elömer</div>
-          </>
-        )}
-      </div>
-
-      {/* Back face */}
-      <div
-        className="absolute inset-0 rounded-r-lg border border-white/10"
-        style={{
-          backfaceVisibility: "hidden",
-          transform: "rotateY(180deg)",
-          background:
-            index === 0
-              ? "linear-gradient(135deg, #0a3560 0%, #072844 100%)"
-              : `linear-gradient(145deg, #f0ebe3 0%, #e8e1d6 100%)`,
-          boxShadow: "inset 4px 0 8px rgba(0,0,0,0.06)",
-        }}
-      />
-
-      {/* Page edge thickness */}
-      <div
-        className="absolute -right-[1px] top-0 h-full w-[2px]"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.06) 100%)",
-        }}
-      />
-    </motion.div>
-  );
-}
-
 export default function ScrollBook() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "center center"],
+    target: ref,
+    offset: ["start start", "end center"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 50,
-    damping: 20,
-    mass: 0.5,
+  const p = useSpring(scrollYProgress, {
+    stiffness: 40,
+    damping: 15,
+    mass: 0.4,
   });
 
-  const bookY = useTransform(smoothProgress, [0, 1], [80, 0]);
-  const bookOpacity = useTransform(smoothProgress, [0, 0.2], [0, 1]);
-  const bookRotate = useTransform(smoothProgress, [0, 1], [8, 0]);
+  const coverAngle = useTransform(p, [0, 1], [0, -170]);
+  const p1Angle = useTransform(p, [0.05, 1], [0, -145]);
+  const p2Angle = useTransform(p, [0.1, 1], [0, -115]);
+  const p3Angle = useTransform(p, [0.15, 1], [0, -85]);
+  const coverY = useTransform(p, [0, 0.5], [0, -6]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative flex min-h-[60vh] items-center justify-center overflow-hidden py-16 sm:min-h-[70vh]"
-    >
-      <motion.div
-        style={{
-          y: bookY,
-          opacity: bookOpacity,
-          rotateX: bookRotate,
-          perspective: 1200,
-        }}
-        className="relative"
-      >
+    <div ref={ref} className="relative flex h-full items-center justify-center">
+      <motion.div style={{ y: coverY }} className="relative">
         <div
           className="relative"
           style={{
-            width: "min(320px, 75vw)",
-            height: "min(440px, 105vw)",
-            perspective: 1200,
-            transformStyle: "preserve-3d",
+            width: "min(260px, 55vw)",
+            height: "min(360px, 75vw)",
+            perspective: 900,
           }}
         >
+          {/* Surface shadow */}
+          <div
+            className="absolute -bottom-6 left-2 right-2 h-10 rounded-[50%]"
+            style={{
+              background: "rgba(0,0,0,0.1)",
+              filter: "blur(12px)",
+            }}
+          />
+
           {/* Back cover */}
           <div
-            className="absolute inset-0 rounded-lg"
+            className="absolute inset-0 rounded-sm"
             style={{
-              background: "linear-gradient(135deg, #0a3560 0%, #072844 100%)",
-              boxShadow: "8px 8px 30px rgba(0,0,0,0.35), 2px 2px 8px rgba(0,0,0,0.15)",
-              transform: "translateZ(-4px)",
+              background: "linear-gradient(145deg, #0d3f73 0%, #082a50 100%)",
+              boxShadow: "6px 6px 24px rgba(0,0,0,0.3), 1px 1px 4px rgba(0,0,0,0.15)",
             }}
           />
 
-          {/* Spine */}
-          <div
-            className="absolute inset-y-0 left-0 w-[6px] rounded-l-lg"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.2) 100%)",
-              transform: "translateX(-3px) rotateY(90deg)",
-              transformOrigin: "left center",
-            }}
-          />
+          {/* Pages stack visual (back) */}
+          {[0, 1, 2].map((i) => (
+            <div
+              key={`stack-${i}`}
+              className="absolute rounded-sm"
+              style={{
+                inset: `${2 + i * 1}px`,
+                left: `${2 + i * 1}px`,
+                right: 0,
+                background: i % 2 === 0 ? "#f5f0e8" : "#ede8df",
+                boxShadow: "inset -2px 0 4px rgba(0,0,0,0.04)",
+                transform: `translateZ(${-i * 0.5}px)`,
+              }}
+            />
+          ))}
 
-          {/* Pages */}
-          <div className="relative h-full w-1/2" style={{ transformStyle: "preserve-3d" }}>
-            {PAGES.map((page, i) => (
-              <BookPage key={i} index={i} progress={smoothProgress} page={page} />
-            ))}
-          </div>
-
-          {/* Static right side - visible pages underneath */}
+          {/* Right half - visible content underneath */}
           <div
-            className="absolute right-0 top-0 h-full overflow-hidden rounded-r-lg border border-white/10"
+            className="absolute right-0 top-0 flex h-full flex-col justify-between overflow-hidden rounded-r-sm border border-white/10"
             style={{
               width: "50%",
-              background: "linear-gradient(145deg, #faf8f5 0%, #f2ece3 100%)",
+              background: "linear-gradient(150deg, #faf8f5 0%, #f0ebe3 100%)",
               boxShadow: "inset -2px 0 6px rgba(0,0,0,0.04)",
             }}
           >
-            <div className="flex h-full flex-col justify-between p-6 sm:p-8">
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground/40">
-                Yetenekler
+            <div className="p-5 sm:p-6">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                Devam
               </div>
-              <div className="mt-3 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              <div className="mt-2 text-sm font-semibold leading-snug tracking-tight text-foreground/80">
                 İdari Ofis
                 <br />
                 Yönetimi
               </div>
-              <div>
-                <div className="mb-4 h-px w-8 bg-border" />
-                <div className="space-y-2 text-xs text-muted-foreground">
-                  <div>Doküman & Evrak Yönetimi</div>
-                  <div>Kurumsal İletişim</div>
-                  <div>Ekip Çalışması</div>
-                  <div>Sunum Hazırlama</div>
-                </div>
+              <div className="mt-3 space-y-1.5">
+                {["Doküman Yönetimi", "Kurumsal İletişim", "Ekip Çalışması"].map((t) => (
+                  <div
+                    key={t}
+                    className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60"
+                  >
+                    <div className="h-px w-1.5 bg-muted-foreground/20" />
+                    {t}
+                  </div>
+                ))}
               </div>
-              <div className="text-[10px] text-muted-foreground/40">Ali Elömer</div>
+            </div>
+            <div className="px-5 pb-5 text-[9px] text-muted-foreground/30 sm:px-6 sm:pb-6">
+              Ali Elömer
             </div>
           </div>
 
-          {/* Cover shadow on surface */}
+          {/* Left half - rotating pages */}
           <div
-            className="absolute -bottom-4 left-4 right-4 h-8 rounded-[50%] blur-xl"
-            style={{ background: "rgba(0,0,0,0.12)" }}
-          />
+            className="absolute left-0 top-0 h-full"
+            style={{
+              width: "50%",
+              transformStyle: "preserve-3d",
+              transformOrigin: "right center",
+            }}
+          >
+            {/* Page 3 */}
+            <RotatingPage
+              angle={p3Angle}
+              bg="linear-gradient(150deg, #f0ebe3 0%, #e8e1d6 100%)"
+              z={3}
+            >
+              <div className="p-5 sm:p-6">
+                <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  Sertifikalar
+                </div>
+                <div className="mt-2 text-sm font-semibold tracking-tight text-foreground/80">
+                  BTK Akademi
+                </div>
+                <div className="mt-3 space-y-1.5">
+                  {["Excel", "PowerPoint", "Canva"].map((t) => (
+                    <div key={t} className="text-[10px] text-muted-foreground/60">
+                      • {t}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </RotatingPage>
+
+            {/* Page 2 */}
+            <RotatingPage
+              angle={p2Angle}
+              bg="linear-gradient(150deg, #f2ede5 0%, #ebe6dd 100%)"
+              z={4}
+            >
+              <div className="p-5 sm:p-6">
+                <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  Diller
+                </div>
+                <div className="mt-2 text-sm font-semibold tracking-tight text-foreground/80">
+                  Türkçe & Arapça
+                </div>
+                <div className="mt-3 text-[10px] leading-relaxed text-muted-foreground/60">
+                  Anadil seviyesinde Türkçe,
+                  <br />
+                  ileri düzey Arapça.
+                </div>
+              </div>
+            </RotatingPage>
+
+            {/* Page 1 */}
+            <RotatingPage
+              angle={p1Angle}
+              bg="linear-gradient(150deg, #f5f0e8 0%, #ede8df 100%)"
+              z={5}
+            >
+              <div className="p-5 sm:p-6">
+                <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">
+                  Tercümanlık
+                </div>
+                <div className="mt-2 text-sm font-semibold tracking-tight text-foreground/80">
+                  TR ↔ AR
+                </div>
+                <div className="mt-3 text-[10px] leading-relaxed text-muted-foreground/60">
+                  Yazılı ve sözlü çeviri.
+                  <br />
+                  Kurumsal iletişim.
+                </div>
+              </div>
+            </RotatingPage>
+
+            {/* Front cover */}
+            <motion.div
+              className="absolute inset-0 rounded-l-sm"
+              style={{
+                rotateY: coverAngle,
+                transformStyle: "preserve-3d",
+                transformOrigin: "right center",
+                zIndex: 10,
+              }}
+            >
+              {/* Cover front */}
+              <div
+                className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-l-sm"
+                style={{
+                  backfaceVisibility: "hidden",
+                  background: "linear-gradient(145deg, #0F4C81 0%, #0b3a63 50%, #082a50 100%)",
+                  boxShadow: "2px 0 12px rgba(0,0,0,0.2)",
+                }}
+              >
+                <div className="p-5 sm:p-6">
+                  <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/12 text-[11px] font-bold text-white/85 backdrop-blur-sm">
+                    AE
+                  </div>
+                </div>
+                <div className="px-5 sm:px-6">
+                  <div className="text-lg font-bold leading-tight tracking-tight text-white/90 sm:text-xl">
+                    Portföy
+                  </div>
+                  <div className="mt-1 text-[10px] text-white/40">2026</div>
+                </div>
+                <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+                  <div className="h-px w-6 bg-white/15" />
+                  <div className="mt-2 text-[9px] text-white/30">Ali Elömer</div>
+                </div>
+                {/* Cover decorative line */}
+                <div
+                  className="absolute right-0 top-0 h-full w-px"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent 10%, rgba(255,255,255,0.06) 50%, transparent 90%)",
+                  }}
+                />
+              </div>
+
+              {/* Cover back (visible when flipped) */}
+              <div
+                className="absolute inset-0 rounded-r-sm"
+                style={{
+                  backfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                  background: "linear-gradient(145deg, #082a50 0%, #061e3a 100%)",
+                }}
+              />
+            </motion.div>
+
+            {/* Spine shadow */}
+            <div
+              className="absolute right-0 top-0 h-full w-[3px]"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.08) 100%)",
+                transform: "translateX(1px)",
+              }}
+            />
+          </div>
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function RotatingPage({
+  angle,
+  bg,
+  z,
+  children,
+}: {
+  angle: ReturnType<typeof useTransform<number, number>>;
+  bg: string;
+  z: number;
+  children: React.ReactNode;
+}) {
+  const springAngle = useSpring(angle, {
+    stiffness: 50,
+    damping: 14,
+    mass: 0.5,
+  });
+
+  return (
+    <motion.div
+      className="absolute inset-0 overflow-hidden rounded-l-sm"
+      style={{
+        rotateY: springAngle,
+        transformStyle: "preserve-3d",
+        transformOrigin: "right center",
+        zIndex: z,
+      }}
+    >
+      {/* Page front */}
+      <div
+        className="absolute inset-0 flex flex-col"
+        style={{
+          backfaceVisibility: "hidden",
+          background: bg,
+          boxShadow: "inset -2px 0 6px rgba(0,0,0,0.04)",
+        }}
+      >
+        {children}
+      </div>
+      {/* Page back */}
+      <div
+        className="absolute inset-0 rounded-r-sm"
+        style={{
+          backfaceVisibility: "hidden",
+          transform: "rotateY(180deg)",
+          background: bg,
+          boxShadow: "inset 2px 0 6px rgba(0,0,0,0.04)",
+        }}
+      />
+    </motion.div>
   );
 }
