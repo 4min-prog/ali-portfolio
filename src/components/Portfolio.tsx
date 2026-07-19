@@ -834,29 +834,91 @@ function Certificates() {
 /* ---------- Gallery: photo grid ---------- */
 
 function Gallery() {
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const row1 = GALLERY.slice(0, Math.ceil(GALLERY.length / 2));
+  const row2 = GALLERY.slice(Math.ceil(GALLERY.length / 2));
+
   return (
     <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <SectionLabel index="05" title="Galeri" />
         </Reveal>
-
-        <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {GALLERY.map((src, i) => (
-            <Reveal key={src} delay={i * 0.03}>
-              <div className="group aspect-square overflow-hidden rounded-xl border border-border bg-muted">
-                <img
-                  src={src}
-                  alt={`Galeri ${i + 1}`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </div>
+
+      <div className="mt-14 space-y-3 overflow-hidden">
+        <MarqueeRow images={row1} direction="left" onImageClick={setLightbox} />
+        <MarqueeRow images={row2} direction="right" onImageClick={setLightbox} />
+      </div>
+
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-background/90 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightbox(null)}
+          >
+            <motion.img
+              src={lightbox}
+              alt="Büyütülmüş görsel"
+              className="max-h-[85vh] max-w-[90vw] rounded-xl object-contain shadow-2xl"
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-card text-foreground shadow-lg transition-colors hover:bg-accent"
+            >
+              ✕
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
+  );
+}
+
+function MarqueeRow({
+  images,
+  direction,
+  onImageClick,
+}: {
+  images: string[];
+  direction: "left" | "right";
+  onImageClick: (src: string) => void;
+}) {
+  const [paused, setPaused] = useState(false);
+  const doubled = [...images, ...images];
+
+  return (
+    <div
+      className="group/row flex gap-3"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div
+        className="flex gap-3"
+        style={{
+          animation: `marquee-${direction} 30s linear infinite`,
+          animationPlayState: paused ? "paused" : "running",
+        }}
+      >
+        {doubled.map((src, i) => (
+          <button
+            key={`${src}-${i}`}
+            onClick={() => onImageClick(src)}
+            className="relative h-48 w-48 shrink-0 overflow-hidden rounded-xl border border-border bg-muted transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:h-56 sm:w-56 md:h-64 md:w-64"
+          >
+            <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
