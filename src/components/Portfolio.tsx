@@ -453,8 +453,8 @@ function Hero() {
     <section id="top" className="relative overflow-hidden pt-24 lg:pt-20">
       <SideRays
         speed={1.5}
-        rayColor1="#0F4C81"
-        rayColor2="#2E7D32"
+        rayColor1="#3c5233"
+        rayColor2="#b38a58"
         intensity={1.2}
         spread={1.8}
         origin="top-right"
