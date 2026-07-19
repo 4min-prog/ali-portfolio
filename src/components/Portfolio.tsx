@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ArrowUpRight,
@@ -12,6 +12,7 @@ import {
   Sun,
   Check,
 } from "lucide-react";
+import SideRays from "./SideRays";
 
 /* ---------- Data ---------- */
 
@@ -183,17 +184,20 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <TopBar dark={dark} toggle={toggle} activeId={activeId} />
+      <LineSidebar dark={dark} toggle={toggle} activeId={activeId} />
+      <MobileTopBar dark={dark} toggle={toggle} />
 
-      <Hero />
-      <About />
-      <Experience />
-      <Education />
-      <Skills />
-      <Certificates />
-      <LanguagesSection />
-      <Contact />
-      <Footer />
+      <div className="lg:pl-16">
+        <Hero />
+        <About />
+        <Experience />
+        <Education />
+        <Skills />
+        <Certificates />
+        <LanguagesSection />
+        <Contact />
+        <Footer />
+      </div>
 
       <AnimatePresence>
         {showTop && (
@@ -203,7 +207,7 @@ export default function Portfolio() {
             exit={{ opacity: 0, y: 8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Başa dön"
-            className="fixed bottom-6 right-6 z-40 inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent"
+            className="fixed bottom-6 right-6 z-40 inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent lg:right-6"
           >
             <ArrowUp className="h-4 w-4" />
             <span className="hidden sm:inline">Başa dön</span>
@@ -214,9 +218,9 @@ export default function Portfolio() {
   );
 }
 
-/* ---------- Top bar ---------- */
+/* ---------- Line Sidebar ---------- */
 
-function TopBar({
+function LineSidebar({
   dark,
   toggle,
   activeId,
@@ -225,6 +229,130 @@ function TopBar({
   toggle: () => void;
   activeId: string;
 }) {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [activeLinePos, setActiveLinePos] = useState<number | null>(null);
+  const [hoverLinePos, setHoverLinePos] = useState<number | null>(null);
+  const [showHoverLine, setShowHoverLine] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Record<string, HTMLAnchorElement>>({});
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const hoverDelayRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const getLinePosition = useCallback((id: string) => {
+    const el = itemRefs.current[id];
+    const nav = navRef.current;
+    if (!el || !nav) return null;
+    const navRect = nav.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    return elRect.top - navRect.top + elRect.height / 2 - 8;
+  }, []);
+
+  useEffect(() => {
+    if (activeId) {
+      const pos = getLinePosition(activeId);
+      setActiveLinePos(pos);
+    }
+  }, [activeId, getLinePosition]);
+
+  const onItemEnter = useCallback(
+    (id: string) => {
+      clearTimeout(hoverTimeoutRef.current);
+      clearTimeout(hoverDelayRef.current);
+      setHoveredId(id);
+      const pos = getLinePosition(id);
+      setHoverLinePos(pos);
+      hoverDelayRef.current = setTimeout(() => setShowHoverLine(true), 120);
+    },
+    [getLinePosition],
+  );
+
+  const onItemLeave = useCallback(() => {
+    clearTimeout(hoverDelayRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setShowHoverLine(false);
+      setHoveredId(null);
+    }, 80);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(hoverTimeoutRef.current);
+      clearTimeout(hoverDelayRef.current);
+    };
+  }, []);
+
+  return (
+    <header className="fixed inset-y-0 left-0 z-40 hidden w-16 flex-col items-center border-r border-border bg-background/85 backdrop-blur lg:flex">
+      <a
+        href="#top"
+        className="mt-5 grid h-8 w-8 place-items-center rounded-md bg-foreground text-[11px] font-semibold tracking-wider text-background"
+      >
+        AE
+      </a>
+
+      <div ref={navRef} className="relative mt-8 flex flex-1 flex-col items-center gap-1">
+        <div
+          className="pointer-events-none absolute left-0 w-0.5 rounded-full bg-foreground transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+          style={{
+            height: 16,
+            transform:
+              activeLinePos !== null ? `translateY(${activeLinePos}px)` : "translateY(-100px)",
+            opacity: activeLinePos !== null ? 1 : 0,
+          }}
+        />
+
+        <div
+          className="pointer-events-none absolute left-0 w-0.5 rounded-full bg-muted-foreground/40 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]"
+          style={{
+            height: 16,
+            transform:
+              hoverLinePos !== null ? `translateY(${hoverLinePos}px)` : "translateY(-100px)",
+            opacity: showHoverLine ? 1 : 0,
+          }}
+        />
+
+        {NAV.map((n) => (
+          <a
+            key={n.id}
+            ref={(el) => {
+              if (el) itemRefs.current[n.id] = el;
+            }}
+            href={`#${n.id}`}
+            onMouseEnter={() => onItemEnter(n.id)}
+            onMouseLeave={onItemLeave}
+            className={`relative flex h-8 w-8 items-center justify-center rounded-md text-[11px] font-medium transition-colors ${
+              activeId === n.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            }`}
+            title={n.label}
+          >
+            {n.label.charAt(0)}
+          </a>
+        ))}
+      </div>
+
+      <div className="mb-5 flex flex-col items-center gap-2">
+        <button
+          onClick={toggle}
+          aria-label="Tema değiştir"
+          className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
+        >
+          {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+        </button>
+        <a
+          href="#contact"
+          className="grid h-8 w-8 place-items-center rounded-md bg-foreground text-background transition-opacity hover:opacity-90"
+          title="İletişim"
+        >
+          <Mail className="h-3.5 w-3.5" />
+        </a>
+      </div>
+    </header>
+  );
+}
+
+/* ---------- Mobile Top Bar ---------- */
+
+function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -235,47 +363,31 @@ function TopBar({
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors ${
+      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors lg:hidden ${
         scrolled
           ? "border-border bg-background/85 backdrop-blur"
           : "border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <a href="#top" className="flex items-center gap-3 text-sm font-medium">
           <span className="grid h-8 w-8 place-items-center rounded-md bg-foreground text-[11px] font-semibold tracking-wider text-background">
             AE
           </span>
-          <span className="hidden sm:inline">Ali Elömer</span>
+          <span>Ali Elömer</span>
         </a>
-
-        <nav className="hidden items-center gap-1 lg:flex">
-          {NAV.map((n) => (
-            <a
-              key={n.id}
-              href={`#${n.id}`}
-              className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
-                activeId === n.id
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {n.label}
-            </a>
-          ))}
-        </nav>
 
         <div className="flex items-center gap-2">
           <button
             onClick={toggle}
             aria-label="Tema değiştir"
-            className="grid h-9 w-9 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
+            className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
           <a
             href="#contact"
-            className="hidden h-9 items-center rounded-md bg-foreground px-4 text-sm font-medium text-background transition-opacity hover:opacity-90 sm:inline-flex"
+            className="inline-flex h-8 items-center rounded-md bg-foreground px-3 text-xs font-medium text-background transition-opacity hover:opacity-90"
           >
             İletişim
           </a>
@@ -289,8 +401,17 @@ function TopBar({
 
 function Hero() {
   return (
-    <section id="top" className="relative pt-32 sm:pt-40">
-      <div className="mx-auto max-w-6xl px-6">
+    <section id="top" className="relative overflow-hidden pt-24 lg:pt-20">
+      <SideRays
+        speed={1.5}
+        rayColor1="#0F4C81"
+        rayColor2="#2E7D32"
+        intensity={1.2}
+        spread={1.8}
+        origin="top-right"
+        opacity={0.35}
+      />
+      <div className="relative z-10 mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-8">
             <Reveal>
@@ -375,8 +496,6 @@ function Hero() {
     </section>
   );
 }
-
-/* ---------- About: two-column editorial ---------- */
 
 function About() {
   return (
