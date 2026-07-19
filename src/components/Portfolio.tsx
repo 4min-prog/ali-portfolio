@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
+import ScrollBook from "./ScrollBook";
 
 /* ---------- Data ---------- */
 
@@ -196,6 +197,7 @@ export default function Portfolio() {
 
       <div className="lg:pl-16">
         <Hero />
+        <ScrollBook />
         <About />
         <Experience />
         <Education />
@@ -379,11 +381,7 @@ function LineSidebar({
         })}
       </div>
 
-      <div
-        className={`mb-5 flex gap-2 ${
-          expanded ? "flex-row px-3" : "flex-col items-center"
-        }`}
-      >
+      <div className={`mb-5 flex gap-2 ${expanded ? "flex-row px-3" : "flex-col items-center"}`}>
         <button
           onClick={toggle}
           aria-label="Tema değiştir"
