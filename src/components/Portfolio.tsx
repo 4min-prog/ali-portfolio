@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
-import ScrollBook from "./ScrollBook";
 
 /* ---------- Data ---------- */
 
@@ -451,7 +450,7 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
 
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden pt-24 pb-24 lg:pt-20 lg:pb-32">
+    <section id="top" className="relative overflow-hidden pt-24 lg:pt-20">
       <SideRays
         speed={1.5}
         rayColor1="#0F4C81"
@@ -508,9 +507,21 @@ function Hero() {
 
           <div className="md:col-span-4">
             <Reveal delay={0.2}>
-              <div className="hidden h-full min-h-[420px] md:block">
-                <ScrollBook />
-              </div>
+              <aside className="rounded-xl border border-border bg-card p-6">
+                <dl className="divide-y divide-border">
+                  {[
+                    { k: "Konum", v: "Gaziantep" },
+                    { k: "Alan", v: "İlahiyat" },
+                    { k: "Diller", v: "Türkçe · Arapça" },
+                    { k: "Durum", v: "Uygun" },
+                  ].map((r) => (
+                    <div key={r.k} className="flex items-center justify-between py-3 text-sm">
+                      <dt className="text-muted-foreground">{r.k}</dt>
+                      <dd className="font-medium">{r.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </aside>
             </Reveal>
           </div>
         </div>
