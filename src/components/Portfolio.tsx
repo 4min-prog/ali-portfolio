@@ -134,10 +134,10 @@ const LANGUAGES = [
 /* ---------- Theme hook ---------- */
 
 function useTheme() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    setDark(saved === "dark");
+    setDark(saved !== "light");
   }, []);
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
