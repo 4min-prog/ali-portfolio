@@ -141,8 +141,8 @@ const GALLERY = [
 ];
 
 const LANGUAGES = [
+  { name: "Arapça", level: "İleri düzey", value: 100 },
   { name: "Türkçe", level: "Anadil", value: 100 },
-  { name: "Arapça", level: "İleri düzey", value: 95 },
 ];
 
 /* ---------- Theme hook ---------- */
@@ -956,6 +956,21 @@ function LanguagesSection() {
 function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: number }) {
   const ref = useRef<HTMLLIElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    const start = Date.now();
+    const duration = 900;
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      setDisplay(Math.round(progress * l.value));
+      if (progress >= 1) clearInterval(timer);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [inView, l.value]);
+
   return (
     <li ref={ref}>
       <div className="flex items-baseline justify-between">
@@ -963,7 +978,7 @@ function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: numbe
           <div className="text-xl font-semibold tracking-tight">{l.name}</div>
           <div className="mt-1 text-sm text-muted-foreground">{l.level}</div>
         </div>
-        <div className="text-sm tabular-nums text-muted-foreground">{l.value}%</div>
+        <div className="text-sm tabular-nums text-muted-foreground">{display}%</div>
       </div>
       <div className="mt-4 h-px w-full overflow-hidden bg-border">
         <motion.div
