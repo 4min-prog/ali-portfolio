@@ -554,7 +554,7 @@ function Hero() {
           <div className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
             {[
               { k: "Deneyim", v: "3+ yıl" },
-              { k: "Sertifika", v: "3" },
+              { k: "Sertifika", v: "4" },
               { k: "Dil", v: "2" },
               { k: "Alan", v: "Eğitim · İdari" },
             ].map((s) => (
@@ -926,12 +926,10 @@ function LanguagesSection() {
               akıcı iletişim.
             </h2>
           </Reveal>
-          <div className="md:col-span-8">
-            <ul className="space-y-10">
-              {LANGUAGES.map((l, i) => (
-                <LanguageRow key={l.name} l={l} delay={i * 0.08} />
-              ))}
-            </ul>
+          <div className="flex items-center justify-center gap-16 md:col-span-8">
+            {LANGUAGES.map((l, i) => (
+              <LanguageRow key={l.name} l={l} delay={i * 0.3} />
+            ))}
           </div>
         </div>
       </div>
