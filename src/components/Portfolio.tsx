@@ -479,8 +479,8 @@ function Hero() {
     <section id="top" className="relative overflow-hidden pt-24 lg:pt-20">
       <SideRays
         speed={1.5}
-        rayColor1="#3c5233"
-        rayColor2="#b38a58"
+        rayColor1="#C0AC30"
+        rayColor2="#690C37"
         intensity={1.2}
         spread={1.8}
         origin="top-right"
@@ -947,7 +947,7 @@ function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: numbe
   useEffect(() => {
     if (!inView) return;
     const start = Date.now();
-    const duration = 900;
+    const duration = 2000;
     const timer = setInterval(() => {
       const elapsed = Date.now() - start;
       const progress = Math.min(elapsed / duration, 1);
@@ -957,22 +957,38 @@ function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: numbe
     return () => clearInterval(timer);
   }, [inView, l.value]);
 
+  const r = 54;
+  const c = 2 * Math.PI * r;
+  const offset = c - (inView ? l.value / 100 : 0) * c;
+
   return (
-    <li ref={ref}>
-      <div className="flex items-baseline justify-between">
-        <div>
-          <div className="text-xl font-semibold tracking-tight">{l.name}</div>
-          <div className="mt-1 text-sm text-muted-foreground">{l.level}</div>
+    <li ref={ref} className="flex flex-col items-center gap-4">
+      <div className="relative h-32 w-32">
+        <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r={r} fill="none" stroke="currentColor" strokeWidth="5" className="text-border" />
+          <motion.circle
+            cx="60"
+            cy="60"
+            r={r}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="5"
+            strokeLinecap="round"
+            className="text-primary"
+            strokeDasharray={c}
+            initial={{ strokeDashoffset: c }}
+            animate={{ strokeDashoffset: inView ? offset : c }}
+            transition={{ duration: 2, ease: "easeOut", delay }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-2xl font-bold tabular-nums">{display}</span>
+          <span className="text-[10px] text-muted-foreground">%</span>
         </div>
-        <div className="text-sm tabular-nums text-muted-foreground">{display}%</div>
       </div>
-      <div className="mt-4 h-px w-full overflow-hidden bg-border">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: inView ? `${l.value}%` : 0 }}
-          transition={{ duration: 0.9, ease: "easeOut", delay }}
-          className="h-px bg-foreground"
-        />
+      <div className="text-center">
+        <div className="text-lg font-semibold tracking-tight">{l.name}</div>
+        <div className="mt-1 text-sm text-muted-foreground">{l.level}</div>
       </div>
     </li>
   );

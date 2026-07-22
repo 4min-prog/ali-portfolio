@@ -48,22 +48,23 @@
   /* Primary — hunter-green #3c5233 */
   --primary: oklch(0.38 0.06 103);
   --primary-foreground: oklch(1 0 0);
-  /* Secondary — olive #6f732f */
-  --secondary: oklch(0.52 0.09 64);
-  --secondary-foreground: oklch(1 0 0);
+  /* Secondary — gold #C0AC30 */
+  --secondary: oklch(0.72 0.12 85);
+  --secondary-foreground: oklch(0.2 0.02 189);
   /* Muted text */
   --muted: oklch(0.95 0.006 85);
   --muted-foreground: oklch(0.5 0.015 189);
   --accent: oklch(0.95 0.006 85);
   --accent-foreground: oklch(0.2 0.02 189);
-  --destructive: oklch(0.58 0.22 27);
+  /* Destructive — maroon #690C37 */
+  --destructive: oklch(0.3 0.12 355);
   --destructive-foreground: oklch(1 0 0);
   /* Border */
   --border: oklch(0.9 0.006 85);
   --hairline: oklch(0.9 0.006 85);
   --input: oklch(0.9 0.006 85);
-  /* Ring — camel #b38a58 */
-  --ring: oklch(0.6 0.08 33);
+  /* Ring — gold */
+  --ring: oklch(0.72 0.12 85);
 }
 
 .dark {
@@ -74,23 +75,26 @@
   --card-foreground: oklch(0.95 0.005 85);
   --popover: oklch(0.22 0.02 189);
   --popover-foreground: oklch(0.95 0.005 85);
-  /* Primary — camel #b38a58 (light for dark bg) */
-  --primary: oklch(0.7 0.08 33);
+  /* Primary — gold #C0AC30 (light for dark bg) */
+  --primary: oklch(0.78 0.12 85);
   --primary-foreground: oklch(0.18 0.02 189);
-  /* Secondary — olive #6f732f (lighter) */
-  --secondary: oklch(0.65 0.09 64);
-  --secondary-foreground: oklch(0.18 0.02 189);
+  /* Secondary — gold darker */
+  --secondary: oklch(0.65 0.1 85);
+  --secondary-foreground: oklch(0.95 0.005 85);
   /* Muted */
   --muted: oklch(0.25 0.015 189);
   --muted-foreground: oklch(0.65 0.015 189);
   --accent: oklch(0.25 0.015 189);
   --accent-foreground: oklch(0.95 0.005 85);
+  /* Destructive — maroon lighter */
+  --destructive: oklch(0.45 0.12 355);
+  --destructive-foreground: oklch(1 0 0);
   /* Border */
   --border: oklch(1 0 0 / 8%);
   --hairline: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 10%);
-  /* Ring — camel */
-  --ring: oklch(0.7 0.08 33);
+  /* Ring — gold */
+  --ring: oklch(0.78 0.12 85);
 }
 
 @keyframes marquee-left {
