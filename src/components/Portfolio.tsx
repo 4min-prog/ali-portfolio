@@ -57,16 +57,6 @@ const EXPERIENCE = [
       "Ofis uygulamaları ile raporlama ve dosyalama çalışmaları.",
     ],
   },
-  {
-    role: "Yazma Eser Metin Analizi — Uzman Yardımcılığı",
-    org: "Akademik Çalışma",
-    period: "—",
-    location: "Siirt",
-    points: [
-      "El yazması eserlerin okunması, transkripsiyonu ve içerik analizi.",
-      "Arapça kaynak taraması ve akademik doküman düzenleme.",
-    ],
-  },
 ];
 
 const EDUCATION = [
@@ -74,13 +64,13 @@ const EDUCATION = [
     school: "Siirt Üniversitesi",
     degree: "İlahiyat, Lisans",
     year: "2026",
-    note: "Yazma eser metin analizi ve Arap dili üzerine yoğunlaşma.",
+    note: "Arap dili üzerine yoğunlaşma.",
   },
   {
     school: "Ömer Özmimar Anadolu İmam Hatip Lisesi",
     degree: "Lise Diploması",
     year: "2022",
-    note: "Sözel alan; dini ilimler ve Arapça formasyonu.",
+    note: "Dini ilimler ve Arapça formasyonu.",
   },
 ];
 
@@ -124,9 +114,6 @@ const CERTIFICATES = [
 ];
 
 const GALLERY = [
-  "/photos/profile-2.jpg",
-  "/photos/profile-3.jpg",
-  "/photos/profile-4.jpg",
   "/photos/cert-excel-1.jpg",
   "/photos/cert-excel-2.jpg",
   "/photos/cert-excel-3.jpg",
