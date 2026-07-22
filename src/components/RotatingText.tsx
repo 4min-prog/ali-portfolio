@@ -8,12 +8,16 @@ const WORDS = [
   "Sekreterlik",
 ];
 
+const COLORS = ["#C0AC30", "#690C37"];
+
 export default function RotatingText() {
   const [index, setIndex] = useState(0);
+  const [color, setColor] = useState(COLORS[0]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % WORDS.length);
+      setColor(COLORS[Math.floor(Math.random() * COLORS.length)]);
     }, 2500);
     return () => clearInterval(timer);
   }, []);
@@ -22,8 +26,9 @@ export default function RotatingText() {
     <span className="inline-block h-[1.2em] overflow-hidden align-bottom">
       <AnimatePresence mode="wait">
         <motion.span
-          key={WORDS[index]}
-          className="inline-block text-primary"
+          key={`${WORDS[index]}-${color}`}
+          className="inline-block"
+          style={{ color }}
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}
