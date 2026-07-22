@@ -30,10 +30,10 @@ const NAV: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "experience", label: "Deneyim", icon: Briefcase },
   { id: "education", label: "Eğitim", icon: GraduationCap },
   { id: "skills", label: "Yetenekler", icon: Star },
+  { id: "gallery", label: "Galeri", icon: Image },
   { id: "certificates", label: "Sertifikalar", icon: Award },
   { id: "languages", label: "Diller", icon: Languages },
   { id: "contact", label: "İletişim", icon: Mail },
-  { id: "gallery", label: "Galeri", icon: Image },
 ];
 
 const EXPERIENCE = [
