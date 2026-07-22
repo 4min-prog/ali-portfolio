@@ -45,12 +45,12 @@
   --card-foreground: oklch(0.2 0.02 189);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.02 189);
-  /* Primary — hunter-green #3c5233 */
-  --primary: oklch(0.38 0.06 103);
-  --primary-foreground: oklch(1 0 0);
-  /* Secondary — gold #C0AC30 */
-  --secondary: oklch(0.72 0.12 85);
-  --secondary-foreground: oklch(0.2 0.02 189);
+  /* Primary — gold #C0AC30 */
+  --primary: oklch(0.72 0.12 85);
+  --primary-foreground: oklch(0.15 0.02 189);
+  /* Secondary — maroon #690C37 */
+  --secondary: oklch(0.3 0.12 355);
+  --secondary-foreground: oklch(1 0 0);
   /* Muted text */
   --muted: oklch(0.95 0.006 85);
   --muted-foreground: oklch(0.5 0.015 189);
@@ -77,10 +77,10 @@
   --popover-foreground: oklch(0.95 0.005 85);
   /* Primary — gold #C0AC30 (light for dark bg) */
   --primary: oklch(0.78 0.12 85);
-  --primary-foreground: oklch(0.18 0.02 189);
-  /* Secondary — gold darker */
-  --secondary: oklch(0.65 0.1 85);
-  --secondary-foreground: oklch(0.95 0.005 85);
+  --primary-foreground: oklch(0.15 0.02 189);
+  /* Secondary — maroon lighter */
+  --secondary: oklch(0.45 0.12 355);
+  --secondary-foreground: oklch(1 0 0);
   /* Muted */
   --muted: oklch(0.25 0.015 189);
   --muted-foreground: oklch(0.65 0.015 189);
