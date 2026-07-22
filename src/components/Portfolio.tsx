@@ -333,9 +333,9 @@ function LineSidebar({
       <div className="flex justify-center pt-5">
         <a
           href="#top"
-          className="flex h-16 w-16 items-center justify-center rounded-lg shadow-sm transition-transform duration-200 hover:scale-105"
+          className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-lg shadow-sm transition-transform duration-200 hover:scale-105"
         >
-          <img src={dark ? "/logo-white.png" : "/logo-gold.png"} alt="AE" className="h-16 w-16 object-contain" />
+          <img src={dark ? "/logo-white.png" : "/logo-gold.png"} alt="AE" className="h-[4.5rem] w-[4.5rem] object-contain" />
         </a>
       </div>
 
@@ -444,8 +444,8 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <a href="#top" className="flex items-center gap-3 text-sm font-medium">
-          <span className="flex h-12 w-12 items-center justify-center rounded-md">
-            <img src={dark ? "/logo-white-sm.png" : "/logo-gold.png"} alt="AE" className="h-12 w-12 object-contain" />
+          <span className="flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
+            <img src={dark ? "/logo-white-sm.png" : "/logo-gold.png"} alt="AE" className="h-[3.5rem] w-[3.5rem] object-contain" />
           </span>
           <span>Ali Elömer</span>
         </a>
@@ -1081,9 +1081,9 @@ function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-10 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3 text-sm">
-          <span className="relative flex h-12 w-12 items-center justify-center rounded-md">
-            <img src="/logo-white-sm.png" alt="AE" className="absolute h-12 w-12 object-contain dark:block hidden" />
-            <img src="/logo-gold.png" alt="AE" className="absolute h-12 w-12 object-contain block dark:hidden" />
+          <span className="relative flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
+            <img src="/logo-white-sm.png" alt="AE" className="absolute h-[3.5rem] w-[3.5rem] object-contain dark:block hidden" />
+            <img src="/logo-gold.png" alt="AE" className="absolute h-[3.5rem] w-[3.5rem] object-contain block dark:hidden" />
           </span>
           <span className="text-muted-foreground">© 2026 Ali Elömer</span>
         </div>
