@@ -499,7 +499,7 @@ function Hero() {
               <h1 className="mt-8 text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
                 Ali Elömer.
                 <br />
-                <RotatingText />.
+                <RotatingText />
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
