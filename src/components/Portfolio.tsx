@@ -124,7 +124,6 @@ const CERTIFICATES = [
 ];
 
 const GALLERY = [
-  "/photos/profile-1.jpg",
   "/photos/profile-2.jpg",
   "/photos/profile-3.jpg",
   "/photos/profile-4.jpg",
