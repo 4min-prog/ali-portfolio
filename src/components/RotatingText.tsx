@@ -6,7 +6,6 @@ const WORDS = [
   "İdari İşler",
   "Eğitimcilik",
   "Sekreterlik",
-  "Gönüllülük",
 ];
 
 export default function RotatingText() {

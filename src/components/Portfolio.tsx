@@ -335,9 +335,9 @@ function LineSidebar({
       <div className="flex justify-center pt-5">
         <a
           href="#top"
-          className="grid h-9 w-9 place-items-center rounded-lg bg-foreground text-[11px] font-semibold tracking-wider text-background shadow-sm transition-transform duration-200 hover:scale-105"
+          className="flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-transform duration-200 hover:scale-105"
         >
-          AE
+          <img src="/logo-white.png" alt="AE" className="h-9 w-9 object-contain" />
         </a>
       </div>
 
@@ -446,8 +446,8 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <a href="#top" className="flex items-center gap-3 text-sm font-medium">
-          <span className="grid h-8 w-8 place-items-center rounded-md bg-foreground text-[11px] font-semibold tracking-wider text-background">
-            AE
+          <span className="flex h-8 w-8 items-center justify-center rounded-md">
+            <img src="/logo-white-sm.png" alt="AE" className="h-8 w-8 object-contain" />
           </span>
           <span>Ali Elömer</span>
         </a>
@@ -1083,8 +1083,8 @@ function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-10 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3 text-sm">
-          <span className="grid h-8 w-8 place-items-center rounded-md bg-foreground text-[11px] font-semibold tracking-wider text-background">
-            AE
+          <span className="flex h-8 w-8 items-center justify-center rounded-md">
+            <img src="/logo-white-sm.png" alt="AE" className="h-8 w-8 object-contain" />
           </span>
           <span className="text-muted-foreground">© 2026 Ali Elömer</span>
         </div>
