@@ -30,7 +30,7 @@ const NAV: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "experience", label: "Deneyim", icon: Briefcase },
   { id: "education", label: "Eğitim", icon: GraduationCap },
   { id: "skills", label: "Yetenekler", icon: Star },
-  { id: "gallery", label: "Galeri", icon: Image },
+  { id: "gallery", label: "Tasarımlar", icon: Image },
   { id: "certificates", label: "Sertifikalar", icon: Award },
   { id: "languages", label: "Diller", icon: Languages },
   { id: "contact", label: "İletişim", icon: Mail },
@@ -114,16 +114,14 @@ const CERTIFICATES = [
 ];
 
 const GALLERY = [
-  "/photos/cert-excel-1.jpg",
-  "/photos/cert-excel-2.jpg",
-  "/photos/cert-excel-3.jpg",
-  "/photos/cert-excel-4.jpg",
-  "/photos/cert-powerpoint-1.jpg",
-  "/photos/cert-powerpoint-2.jpg",
-  "/photos/cert-word-1.jpg",
-  "/photos/cert-word-2.jpg",
   "/photos/cert-canva-1.jpg",
   "/photos/cert-canva-2.jpg",
+  "/photos/cert-powerpoint-1.jpg",
+  "/photos/cert-powerpoint-2.jpg",
+  "/photos/cert-excel-1.jpg",
+  "/photos/cert-excel-2.jpg",
+  "/photos/cert-word-1.jpg",
+  "/photos/cert-word-2.jpg",
 ];
 
 const LANGUAGES = [
@@ -828,7 +826,7 @@ function Gallery() {
     <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="05" title="Galeri" />
+          <SectionLabel index="05" title="Tasarımlar" />
         </Reveal>
       </div>
 
