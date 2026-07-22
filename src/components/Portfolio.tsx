@@ -504,7 +504,7 @@ function Hero() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                Eğitim, idari işler ve tercümanlık alanlarında deneyimli; öğrenmeye açık, sorumluluk
+                Eğitim, idari işler ve tercümanlık alanlarında; öğrenmeye açık, sorumluluk
                 sahibi ve ekip çalışmasına uyumlu bir profesyonel.
               </p>
             </Reveal>
