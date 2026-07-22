@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const WORDS = [
-  "İlahiyat Mezunu",
-  "Tercüman",
-  "İdari İşler Uzmanı",
-  "Arapça Bilen",
-  "Proje Yöneticisi",
-  "Eğitimci",
+  "Tercümanlık",
+  "İdari İşler",
+  "Eğitimcilik",
+  "Sekreterlik",
+  "Gönüllülük",
 ];
 
 export default function RotatingText() {
