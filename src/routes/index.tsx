@@ -5,13 +5,13 @@ export const Route = createFileRoute("/")({
   component: Portfolio,
   head: () => ({
     meta: [
-      { title: "Ali Elömer — İlahiyat Mezunu | Portföy" },
+      { title: "Ali Al Omar | Portföy" },
       {
         name: "description",
         content:
           "Ali Elömer'in kişisel portföy sitesi. Eğitim, idari işler ve tercümanlık alanlarında deneyimli İlahiyat mezunu.",
       },
-      { property: "og:title", content: "Ali Elömer — İlahiyat Mezunu" },
+      { property: "og:title", content: "Ali Al Omar" },
       {
         property: "og:description",
         content:
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Ali Elömer — İlahiyat Mezunu" },
+      { name: "twitter:title", content: "Ali Al Omar" },
       {
         name: "twitter:description",
         content: "Eğitim, idari işler ve tercümanlık alanlarında deneyimli İlahiyat mezunu.",
