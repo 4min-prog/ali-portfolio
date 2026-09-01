@@ -22,95 +22,17 @@ import {
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
 import RotatingText from "./RotatingText";
+import { useLanguage, type Lang } from "../lib/i18n";
 
-/* ---------- Data ---------- */
-
-const NAV: { id: string; label: string; icon: LucideIcon }[] = [
-  { id: "about", label: "Hakkımda", icon: User },
-  { id: "experience", label: "Deneyim", icon: Briefcase },
-  { id: "education", label: "Eğitim", icon: GraduationCap },
-  { id: "skills", label: "Yetenekler", icon: Star },
-  { id: "gallery", label: "Tasarımlar", icon: Image },
-  { id: "certificates", label: "Sertifikalar", icon: Award },
-  { id: "languages", label: "Diller", icon: Languages },
-  { id: "contact", label: "İletişim", icon: Mail },
-];
-
-const EXPERIENCE = [
-  {
-    role: "Yaz Kur'an Kursu Öğreticisi",
-    org: "Ömer Şeyh Camii",
-    period: "2022 — 2023",
-    location: "Gaziantep",
-    points: [
-      "Farklı yaş gruplarına yönelik ders programlarının hazırlanması ve uygulanması.",
-      "Öğrenci gelişiminin takibi ve veli iletişimi.",
-    ],
-  },
-  {
-    role: "Stajyer",
-    org: "Millî Eğitim Bakanlığı",
-    period: "2026",
-    location: "Gaziantep",
-    points: [
-      "Kurumsal süreçler, evrak yönetimi ve idari işleyişte saha deneyimi.",
-      "Ofis uygulamaları ile raporlama ve dosyalama çalışmaları.",
-    ],
-  },
-];
-
-const EDUCATION = [
-  {
-    school: "Siirt Üniversitesi",
-    degree: "İlahiyat, Lisans",
-    year: "2026",
-    note: "Arap dili üzerine yoğunlaşma.",
-  },
-  {
-    school: "Ömer Özmimar Anadolu İmam Hatip Lisesi",
-    degree: "Lise Diploması",
-    year: "2022",
-    note: "Dini ilimler ve Arapça formasyonu.",
-  },
-];
-
-const OFFICE_SKILLS = [
-  { name: "Microsoft Word", level: "İleri" },
-  { name: "Microsoft Excel", level: "Orta" },
-  { name: "Microsoft PowerPoint", level: "İleri" },
-  { name: "Canva", level: "İleri" },
-];
-
-const CAPABILITIES = [
-  "İdari Ofis Yönetimi",
-  "Doküman & Evrak Yönetimi",
-  "Tercümanlık (TR ↔ AR)",
-  "Sunum Hazırlama",
-  "Kurumsal İletişim",
-  "Ekip Çalışması",
-];
-
-const CERTIFICATES = [
-  {
-    title: "Excel Temel Beceriler",
-    issuer: "Online Eğitim",
-    pdf: "/certificates/Microsoft_Excel_Temelleri_Sertifika (ali).pdf",
-  },
-  {
-    title: "PowerPoint Temel Beceriler",
-    issuer: "Online Eğitim",
-    pdf: "/certificates/Microsoft_PowerPoint_Sertifika.pdf",
-  },
-  {
-    title: "Word Temel Beceriler",
-    issuer: "Online Eğitim",
-    pdf: "/certificates/Microsoft_Word_Temelleri_Sertifika..ali el omer.pdf",
-  },
-  {
-    title: "Canva Uygulamalı",
-    issuer: "Online Eğitim",
-    pdf: "/certificates/Uygulamal%C4%B1_Canva_Sertifika%20(ali).pdf",
-  },
+const NAV_IDS: { id: string; icon: LucideIcon }[] = [
+  { id: "about", icon: User },
+  { id: "experience", icon: Briefcase },
+  { id: "education", icon: GraduationCap },
+  { id: "skills", icon: Star },
+  { id: "gallery", icon: Image },
+  { id: "certificates", icon: Award },
+  { id: "languages", icon: Languages },
+  { id: "contact", icon: Mail },
 ];
 
 const GALLERY = [
@@ -124,9 +46,10 @@ const GALLERY = [
   "/photos/cert-word-2.jpg",
 ];
 
-const LANGUAGES = [
-  { name: "Arapça", level: "İleri düzey", value: 100 },
-  { name: "Türkçe", level: "Anadil", value: 100 },
+const LANGS: { code: Lang; label: string }[] = [
+  { code: "tr", label: "TR" },
+  { code: "ar", label: "AR" },
+  { code: "en", label: "EN" },
 ];
 
 /* ---------- Theme hook ---------- */
@@ -205,13 +128,14 @@ export default function Portfolio() {
       },
       { rootMargin: "-40% 0px -55% 0px" },
     );
-    NAV.forEach((n) => {
+    NAV_IDS.forEach((n) => {
       const el = document.getElementById(n.id);
       if (el) obs.observe(el);
     });
     return () => obs.disconnect();
   }, []);
 
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <LineSidebar dark={dark} toggle={toggle} activeId={activeId} />
@@ -237,11 +161,11 @@ export default function Portfolio() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            aria-label="Başa dön"
+            aria-label={t.backToTop}
             className="fixed bottom-6 right-6 z-40 inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent lg:right-6"
           >
             <ArrowUp className="h-4 w-4" />
-            <span className="hidden sm:inline">Başa dön</span>
+            <span className="hidden sm:inline">{t.backToTop}</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -277,6 +201,12 @@ function LineSidebar({
     const elRect = el.getBoundingClientRect();
     return elRect.top - navRect.top + elRect.height / 2 - 8;
   }, []);
+
+  const { t, lang, setLang } = useLanguage();
+  const navItems = NAV_IDS.map((n) => ({
+    ...n,
+    label: (t.nav as Record<string, string>)[n.id],
+  }));
 
   useEffect(() => {
     if (activeId) {
@@ -335,7 +265,11 @@ function LineSidebar({
           href="#top"
           className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-lg shadow-sm transition-transform duration-200 hover:scale-105"
         >
-          <img src={dark ? "/logo-white.png" : "/logo-gold.png"} alt="AE" className="h-[4.5rem] w-[4.5rem] object-contain" />
+          <img
+            src={dark ? "/logo-white.png" : "/logo-gold.png"}
+            alt="AE"
+            className="h-[4.5rem] w-[4.5rem] object-contain"
+          />
         </a>
       </div>
 
@@ -365,7 +299,7 @@ function LineSidebar({
           }}
         />
 
-        {NAV.map((n) => {
+        {navItems.map((n) => {
           const Icon = n.icon;
           return (
             <a
@@ -403,21 +337,41 @@ function LineSidebar({
         })}
       </div>
 
-      <div className={`mb-5 flex gap-2 ${expanded ? "flex-row px-3" : "flex-col items-center"}`}>
-        <button
-          onClick={toggle}
-          aria-label="Tema değiştir"
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
-        >
-          {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-        </button>
-        <a
-          href="#contact"
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-foreground text-background transition-opacity hover:opacity-90"
-          title="İletişim"
-        >
-          <Mail className="h-3.5 w-3.5" />
-        </a>
+      <div
+        className={`flex flex-col gap-2 px-3 ${expanded ? "items-stretch mb-3" : "items-center mb-3"}`}
+      >
+        <div className={`flex gap-1.5 ${expanded ? "w-full" : "flex-col items-center"}`}>
+          {LANGS.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => setLang(l.code)}
+              aria-label={`${l.label} - ${t.langLabel}`}
+              className={`h-8 shrink-0 rounded-md border text-xs font-semibold transition-colors ${
+                lang === l.code
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
+              } ${expanded ? "flex-1" : "w-8"}`}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+        <div className={`flex gap-2 ${expanded ? "flex-row" : "flex-col items-center"}`}>
+          <button
+            onClick={toggle}
+            aria-label={t.themeLabel}
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
+          >
+            {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+          </button>
+          <a
+            href="#contact"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-foreground text-background transition-opacity hover:opacity-90"
+            title={t.contactLabel}
+          >
+            <Mail className="h-3.5 w-3.5" />
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -427,6 +381,7 @@ function LineSidebar({
 
 function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
   const [scrolled, setScrolled] = useState(false);
+  const { t, lang, setLang } = useLanguage();
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -445,15 +400,33 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <a href="#top" className="flex items-center gap-3 text-sm font-medium">
           <span className="flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
-            <img src={dark ? "/logo-white-sm.png" : "/logo-gold.png"} alt="AE" className="h-[3.5rem] w-[3.5rem] object-contain" />
+            <img
+              src={dark ? "/logo-white-sm.png" : "/logo-gold.png"}
+              alt="AE"
+              className="h-[3.5rem] w-[3.5rem] object-contain"
+            />
           </span>
           <span>Ali Elömer</span>
         </a>
 
         <div className="flex items-center gap-2">
+          {LANGS.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => setLang(l.code)}
+              aria-label={`${l.label} - ${t.langLabel}`}
+              className={`grid h-8 w-8 place-items-center rounded-md border text-xs font-semibold transition-colors ${
+                lang === l.code
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
+              }`}
+            >
+              {l.label}
+            </button>
+          ))}
           <button
             onClick={toggle}
-            aria-label="Tema değiştir"
+            aria-label={t.themeLabel}
             className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -462,7 +435,7 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
             href="#contact"
             className="inline-flex h-8 items-center rounded-md bg-foreground px-3 text-xs font-medium text-background transition-opacity hover:opacity-90"
           >
-            İletişim
+            {t.contactLabel}
           </a>
         </div>
       </div>
@@ -473,6 +446,7 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
 /* ---------- Hero ---------- */
 
 function Hero() {
+  const { t } = useLanguage();
   return (
     <section id="top" className="relative overflow-hidden pt-24 lg:pt-20">
       <SideRays
@@ -490,20 +464,19 @@ function Hero() {
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
                 <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                Gaziantep, Türkiye · Fırsatlara açık
+                {t.hero.badge}
               </div>
             </Reveal>
             <Reveal delay={0.05}>
               <h1 className="mt-8 text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
-                Ali Elömer.
+                {t.hero.name}
                 <br />
                 <RotatingText />
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                Eğitim, idari işler ve tercümanlık alanlarında; öğrenmeye açık, sorumluluk
-                sahibi ve ekip çalışmasına uyumlu bir profesyonel.
+                {t.hero.subtitle}
               </p>
             </Reveal>
             <Reveal delay={0.15}>
@@ -514,13 +487,13 @@ function Hero() {
                   className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                 >
                   <Download className="h-4 w-4" />
-                  CV indir
+                  {t.hero.cvDownload}
                 </a>
                 <a
                   href="#contact"
                   className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
                 >
-                  İletişime geç
+                  {t.hero.contactBtn}
                   <ArrowUpRight className="h-4 w-4" />
                 </a>
               </div>
@@ -532,10 +505,10 @@ function Hero() {
               <aside className="rounded-xl border border-border bg-card p-6">
                 <dl className="divide-y divide-border">
                   {[
-                    { k: "Konum", v: "Gaziantep" },
-                    { k: "Alan", v: "İlahiyat" },
-                    { k: "Diller", v: "Türkçe · Arapça" },
-                    { k: "Durum", v: "Uygun" },
+                    { k: t.hero.infoKeys.location, v: t.hero.infoValues.location },
+                    { k: t.hero.infoKeys.field, v: t.hero.infoValues.field },
+                    { k: t.hero.infoKeys.languages, v: t.hero.infoValues.languages },
+                    { k: t.hero.infoKeys.status, v: t.hero.infoValues.status },
                   ].map((r) => (
                     <div key={r.k} className="flex items-center justify-between py-3 text-sm">
                       <dt className="text-muted-foreground">{r.k}</dt>
@@ -551,10 +524,10 @@ function Hero() {
         <Reveal delay={0.25}>
           <div className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
             {[
-              { k: "Deneyim", v: "3+ yıl" },
-              { k: "Sertifika", v: "4" },
-              { k: "Dil", v: "2" },
-              { k: "Alan", v: "Eğitim · İdari" },
+              { k: t.hero.stats.experience, v: t.hero.stats.experienceVal },
+              { k: t.hero.stats.certificates, v: t.hero.stats.certificatesVal },
+              { k: t.hero.stats.languages, v: t.hero.stats.languagesVal },
+              { k: t.hero.stats.field, v: t.hero.stats.fieldVal },
             ].map((s) => (
               <div key={s.k} className="bg-card p-6">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">{s.k}</div>
@@ -569,11 +542,12 @@ function Hero() {
 }
 
 function About() {
+  const { t } = useLanguage();
   return (
     <section id="about" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="01" title="Hakkımda" />
+          <SectionLabel index={t.about.index} title={t.about.title} />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
@@ -590,27 +564,25 @@ function About() {
           <div className="space-y-8 md:col-span-7">
             <Reveal delay={0.08}>
               <h2 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-                Eğitim disiplini ile
-                <br />
-                kurumsal iş anlayışı.
+                {t.about.heading.split("\n").map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    {i < t.about.heading.split("\n").length - 1 && <br />}
+                  </span>
+                ))}
               </h2>
             </Reveal>
             <Reveal delay={0.12}>
-              <p className="text-base leading-[1.75] text-foreground/85 sm:text-lg">
-                Eğitim sektöründeki stajyerlik ve öğreticilik tecrübemi, sanayide edindiğim iş
-                disipliniyle birleştiren bir İlahiyat mezunuyum. Sekreterlik, tercümanlık, temel
-                ofis uygulamaları ve Canva tasarımları konusunda bilgi sahibiyim.
-              </p>
+              <p className="text-base leading-[1.75] text-foreground/85 sm:text-lg">{t.about.p1}</p>
             </Reveal>
             <Reveal delay={0.16}>
               <p className="text-base leading-[1.75] text-muted-foreground sm:text-lg">
-                Öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu bir yapıya sahibim.
-                Kurumsal işleyişe kolay adapte olur, doküman süreçlerini titizlikle yürütürüm.
+                {t.about.p2}
               </p>
             </Reveal>
             <Reveal delay={0.2}>
               <ul className="grid grid-cols-1 gap-x-6 gap-y-3 pt-2 sm:grid-cols-2">
-                {CAPABILITIES.map((c) => (
+                {t.about.capabilities.map((c) => (
                   <li key={c} className="flex items-start gap-2.5 text-sm">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
                     <span>{c}</span>
@@ -628,23 +600,24 @@ function About() {
 /* ---------- Experience: table-style timeline ---------- */
 
 function Experience() {
+  const { t } = useLanguage();
   return (
     <section id="experience" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="02" title="Deneyim" />
+          <SectionLabel index={t.experience.index} title={t.experience.title} />
         </Reveal>
 
         <Reveal delay={0.05}>
           <div className="mt-14 flex items-end justify-between">
             <h2 className="max-w-xl text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-              Eğitim, idari ve akademik alanda saha deneyimi.
+              {t.experience.heading}
             </h2>
           </div>
         </Reveal>
 
         <div className="mt-14 divide-y divide-border border-y border-border">
-          {EXPERIENCE.map((e, i) => (
+          {t.experience.items.map((e, i) => (
             <Reveal key={e.role} delay={i * 0.05}>
               <article className="group grid grid-cols-12 gap-6 py-8 transition-colors hover:bg-card">
                 <div className="col-span-12 md:col-span-2">
@@ -679,20 +652,21 @@ function Experience() {
 /* ---------- Education: two large cards ---------- */
 
 function Education() {
+  const { t } = useLanguage();
   return (
     <section id="education" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="03" title="Eğitim" />
+          <SectionLabel index={t.education.index} title={t.education.title} />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {EDUCATION.map((e, i) => (
+          {t.education.items.map((e, i) => (
             <Reveal key={e.school} delay={i * 0.06}>
               <article className="flex h-full flex-col rounded-xl border border-border bg-card p-8 transition-shadow hover:shadow-[var(--shadow-raised)]">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                    {i === 0 ? "Lisans" : "Lise"}
+                    {e.level}
                   </span>
                   <span className="text-sm font-medium tabular-nums text-muted-foreground">
                     {e.year}
@@ -713,33 +687,36 @@ function Education() {
 /* ---------- Skills: split list + capability grid ---------- */
 
 function Skills() {
+  const { t } = useLanguage();
   return (
     <section id="skills" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="04" title="Yetenekler" />
+          <SectionLabel index={t.skills.index} title={t.skills.title} />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <Reveal>
               <h2 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-                Ofis uygulamaları
-                <br />
-                ve tasarım.
+                {t.skills.heading.split("\n").map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    {i < t.skills.heading.split("\n").length - 1 && <br />}
+                  </span>
+                ))}
               </h2>
             </Reveal>
             <Reveal delay={0.05}>
               <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
-                Günlük iş akışlarında güvenle kullandığım araçlar ve kurumsal iletişimde
-                geliştirdiğim yetkinlikler.
+                {t.skills.description}
               </p>
             </Reveal>
           </div>
 
           <div className="md:col-span-7">
             <ul className="divide-y divide-border border-y border-border">
-              {OFFICE_SKILLS.map((s, i) => (
+              {t.skills.officeSkills.map((s, i) => (
                 <Reveal key={s.name} delay={i * 0.04}>
                   <li className="flex items-center justify-between py-5">
                     <span className="text-base font-medium">{s.name}</span>
@@ -751,7 +728,7 @@ function Skills() {
 
             <Reveal delay={0.2}>
               <div className="mt-10 flex flex-wrap gap-2">
-                {CAPABILITIES.map((c) => (
+                {t.about.capabilities.map((c) => (
                   <span
                     key={c}
                     className="rounded-md border border-border bg-card px-3 py-1.5 text-xs text-foreground/80"
@@ -771,24 +748,25 @@ function Skills() {
 /* ---------- Certificates: minimal list ---------- */
 
 function Certificates() {
+  const { t } = useLanguage();
   return (
     <section id="certificates" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="06" title="Sertifikalar" />
+          <SectionLabel index={t.certificates.index} title={t.certificates.title} />
         </Reveal>
 
         <Reveal delay={0.05}>
           <div className="mt-14 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <h2 className="max-w-xl text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-              Online eğitim sertifikaları.
+              {t.certificates.heading}
             </h2>
-            <span className="text-sm text-muted-foreground">4 sertifika</span>
+            <span className="text-sm text-muted-foreground">{t.certificates.count}</span>
           </div>
         </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {CERTIFICATES.map((c, i) => (
+          {t.certificates.items.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.05}>
               <article className="flex items-center justify-between rounded-xl border border-border bg-card p-6 transition-colors hover:bg-accent">
                 <div>
@@ -819,6 +797,7 @@ function Certificates() {
 
 function Gallery() {
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const { t } = useLanguage();
   const row1 = GALLERY.slice(0, Math.ceil(GALLERY.length / 2));
   const row2 = GALLERY.slice(Math.ceil(GALLERY.length / 2));
 
@@ -826,7 +805,7 @@ function Gallery() {
     <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="05" title="Tasarımlar" />
+          <SectionLabel index={t.gallery.index} title={t.gallery.title} />
         </Reveal>
       </div>
 
@@ -909,24 +888,34 @@ function MarqueeRow({
 /* ---------- Languages: minimal meter ---------- */
 
 function LanguagesSection() {
+  const { t } = useLanguage();
   return (
     <section id="languages" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="07" title="Diller" />
+          <SectionLabel index={t.languagesSection.index} title={t.languagesSection.title} />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
           <Reveal className="md:col-span-4">
             <h2 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-              İki dilde
-              <br />
-              akıcı iletişim.
+              {t.languagesSection.heading.split("\n").map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i < t.languagesSection.heading.split("\n").length - 1 && <br />}
+                </span>
+              ))}
             </h2>
           </Reveal>
           <div className="flex items-center justify-center gap-16 md:col-span-8">
-            {LANGUAGES.map((l, i) => (
-              <LanguageRow key={l.name} l={l} delay={i * 0.3} />
+            {t.languagesSection.items.map((l, i) => (
+              <LanguageRow
+                key={l.name}
+                name={l.name}
+                level={l.level}
+                value={l.value}
+                delay={i * 0.3}
+              />
             ))}
           </div>
         </div>
@@ -935,7 +924,17 @@ function LanguagesSection() {
   );
 }
 
-function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: number }) {
+function LanguageRow({
+  name,
+  level,
+  value,
+  delay,
+}: {
+  name: string;
+  level: string;
+  value: number;
+  delay: number;
+}) {
   const ref = useRef<HTMLLIElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const [display, setDisplay] = useState(0);
@@ -947,21 +946,29 @@ function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: numbe
     const timer = setInterval(() => {
       const elapsed = Date.now() - start;
       const progress = Math.min(elapsed / duration, 1);
-      setDisplay(Math.round(progress * l.value));
+      setDisplay(Math.round(progress * value));
       if (progress >= 1) clearInterval(timer);
     }, 16);
     return () => clearInterval(timer);
-  }, [inView, l.value]);
+  }, [inView, value]);
 
   const r = 54;
   const c = 2 * Math.PI * r;
-  const offset = c - (inView ? l.value / 100 : 0) * c;
+  const offset = c - (inView ? value / 100 : 0) * c;
 
   return (
     <li ref={ref} className="flex flex-col items-center gap-4">
       <div className="relative h-32 w-32">
         <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r={r} fill="none" stroke="currentColor" strokeWidth="5" className="text-border" />
+          <circle
+            cx="60"
+            cy="60"
+            r={r}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="5"
+            className="text-border"
+          />
           <motion.circle
             cx="60"
             cy="60"
@@ -983,8 +990,8 @@ function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: numbe
         </div>
       </div>
       <div className="text-center">
-        <div className="text-lg font-semibold tracking-tight">{l.name}</div>
-        <div className="mt-1 text-sm text-muted-foreground">{l.level}</div>
+        <div className="text-lg font-semibold tracking-tight">{name}</div>
+        <div className="mt-1 text-sm text-muted-foreground">{level}</div>
       </div>
     </li>
   );
@@ -993,19 +1000,20 @@ function LanguageRow({ l, delay }: { l: (typeof LANGUAGES)[number]; delay: numbe
 /* ---------- Contact ---------- */
 
 function Contact() {
+  const { t } = useLanguage();
   const items = [
-    { icon: MapPin, k: "Konum", v: "Gaziantep, Türkiye", href: undefined },
-    { icon: Phone, k: "Telefon", v: "+90 538 587 77 39", href: "tel:+905385877739" },
+    { icon: MapPin, k: t.contact.items[0].k, v: t.contact.items[0].v, href: undefined },
+    { icon: Phone, k: t.contact.items[1].k, v: t.contact.items[1].v, href: "tel:+905385877739" },
     {
       icon: Mail,
-      k: "E-posta",
-      v: "alielomer450@gmail.com",
+      k: t.contact.items[2].k,
+      v: t.contact.items[2].v,
       href: "mailto:alielomer450@gmail.com",
     },
     {
       icon: Linkedin,
-      k: "LinkedIn",
-      v: "linkedin.com/in/aliomerr",
+      k: t.contact.items[3].k,
+      v: t.contact.items[3].v,
       href: "https://linkedin.com/in/aliomerr",
     },
   ];
@@ -1014,22 +1022,24 @@ function Contact() {
     <section id="contact" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionLabel index="08" title="İletişim" />
+          <SectionLabel index={t.contact.index} title={t.contact.title} />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-6">
             <Reveal>
               <h2 className="text-3xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
-                Birlikte çalışmak için
-                <br />
-                iletişime geçelim.
+                {t.contact.heading.split("\n").map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    {i < t.contact.heading.split("\n").length - 1 && <br />}
+                  </span>
+                ))}
               </h2>
             </Reveal>
             <Reveal delay={0.05}>
               <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-                Eğitim, idari işler, tercümanlık veya ofis yönetimi gerektiren pozisyonlar için
-                mesajlarınıza kısa sürede dönüş sağlıyorum.
+                {t.contact.description}
               </p>
             </Reveal>
             <Reveal delay={0.1}>
@@ -1038,7 +1048,7 @@ function Contact() {
                 className="mt-8 inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 <Mail className="h-4 w-4" />
-                E-posta gönder
+                {t.contact.emailBtn}
               </a>
             </Reveal>
           </div>
@@ -1077,19 +1087,26 @@ function Contact() {
 /* ---------- Footer ---------- */
 
 function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-10 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3 text-sm">
           <span className="relative flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
-            <img src="/logo-white-sm.png" alt="AE" className="absolute h-[3.5rem] w-[3.5rem] object-contain dark:block hidden" />
-            <img src="/logo-gold.png" alt="AE" className="absolute h-[3.5rem] w-[3.5rem] object-contain block dark:hidden" />
+            <img
+              src="/logo-white-sm.png"
+              alt="AE"
+              className="absolute h-[3.5rem] w-[3.5rem] object-contain dark:block hidden"
+            />
+            <img
+              src="/logo-gold.png"
+              alt="AE"
+              className="absolute h-[3.5rem] w-[3.5rem] object-contain block dark:hidden"
+            />
           </span>
-          <span className="text-muted-foreground">© 2026 Ali Elömer</span>
+          <span className="text-muted-foreground">{t.footer.copyright}</span>
         </div>
-        <div className="text-xs text-muted-foreground">
-          Gaziantep, Türkiye — alielomer450@gmail.com
-        </div>
+        <div className="text-xs text-muted-foreground">{t.footer.location}</div>
       </div>
     </footer>
   );

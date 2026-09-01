@@ -1,8 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Portfolio from "@/components/Portfolio";
+import { LanguageProvider } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
-  component: Portfolio,
+  component: () => (
+    <LanguageProvider>
+      <Portfolio />
+    </LanguageProvider>
+  ),
   head: () => ({
     meta: [
       { title: "Ali Al Omar | Portföy" },
