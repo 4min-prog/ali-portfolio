@@ -118,6 +118,16 @@ const translations = {
     gallery: {
       index: "05",
       title: "Tasarımlar",
+      items: [
+        { title: "Canva · Afiş", desc: "Tanıtım afişi" },
+        { title: "Canva · Kart", desc: "Kartvizit tasarımı" },
+        { title: "Sunum Kapağı", desc: "PowerPoint kapağı" },
+        { title: "Slayt Tasarımı", desc: "Eğitim slaytı" },
+        { title: "Veri Tablosu", desc: "Excel raporlaması" },
+        { title: "Grafik Düzeni", desc: "Excel grafiği" },
+        { title: "Belge Düzeni", desc: "Word belgesi" },
+        { title: "Doküman Kapağı", desc: "Word kapak düzeni" },
+      ],
     },
     certificates: {
       index: "06",
@@ -294,6 +304,16 @@ const translations = {
     gallery: {
       index: "٠٥",
       title: "التصاميم",
+      items: [
+        { title: "Canva · ملصق", desc: "ملصق تعريفي" },
+        { title: "Canva · بطاقة", desc: "تصميم بطاقة عمل" },
+        { title: "غلاف عرض", desc: "غلاف PowerPoint" },
+        { title: "تصميم شريحة", desc: "شريحة تعليمية" },
+        { title: "جدول بيانات", desc: "تقرير Excel" },
+        { title: "تخطيط رسم", desc: "رسم بياني Excel" },
+        { title: "تخطيط مستند", desc: "مستند Word" },
+        { title: "غلاف وثيقة", desc: "تخطيط غلاف Word" },
+      ],
     },
     certificates: {
       index: "٠٦",
@@ -470,6 +490,16 @@ const translations = {
     gallery: {
       index: "05",
       title: "Designs",
+      items: [
+        { title: "Canva · Poster", desc: "Promotional poster" },
+        { title: "Canva · Card", desc: "Business card design" },
+        { title: "Slide Cover", desc: "PowerPoint cover" },
+        { title: "Slide Layout", desc: "Training slide" },
+        { title: "Data Table", desc: "Excel reporting" },
+        { title: "Chart Layout", desc: "Excel chart" },
+        { title: "Document Layout", desc: "Word document" },
+        { title: "Document Cover", desc: "Word cover layout" },
+      ],
     },
     certificates: {
       index: "06",
@@ -584,7 +614,11 @@ export type Translations = {
     description: string;
     officeSkills: { name: string; level: string }[];
   };
-  gallery: { index: string; title: string };
+  gallery: {
+    index: string;
+    title: string;
+    items: { title: string; desc: string }[];
+  };
   certificates: {
     index: string;
     title: string;

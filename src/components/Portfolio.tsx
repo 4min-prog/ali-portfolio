@@ -793,26 +793,59 @@ function Certificates() {
   );
 }
 
-/* ---------- Gallery: photo grid ---------- */
+/* ---------- Gallery: large cards with labels ---------- */
 
 function Gallery() {
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<{ src: string; title: string; desc: string } | null>(
+    null,
+  );
   const { t } = useLanguage();
-  const row1 = GALLERY.slice(0, Math.ceil(GALLERY.length / 2));
-  const row2 = GALLERY.slice(Math.ceil(GALLERY.length / 2));
 
   return (
     <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto mb-12 w-full max-w-6xl px-6">
         <Reveal>
           <SectionLabel index={t.gallery.index} title={t.gallery.title} />
         </Reveal>
       </div>
 
-      <div className="mt-14 space-y-3 overflow-hidden">
-        <MarqueeRow images={row1} direction="left" onImageClick={setLightbox} />
-        <MarqueeRow images={row2} direction="right" onImageClick={setLightbox} />
-      </div>
+      <Reveal delay={0.05}>
+        <div className="flex gap-5 overflow-x-auto px-6 pb-8 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
+          {GALLERY.map((src, i) => {
+            const item = t.gallery.items[i] ?? { title: "", desc: "" };
+            return (
+              <button
+                key={`${src}-${i}`}
+                onClick={() => setLightbox({ src, title: item.title, desc: item.desc })}
+                className="group w-[16rem] shrink-0 snap-start overflow-hidden rounded-xl border border-border bg-card text-left shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-raised)] sm:w-[19rem] md:w-[22rem]"
+              >
+                <div className="relative h-60 overflow-hidden sm:h-64 md:h-72">
+                  <img
+                    src={src}
+                    alt={item.title}
+                    loading="lazy"
+                    draggable={false}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="absolute left-3 top-3 rounded-md bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
+                    {item.title}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-3 px-4 py-3.5">
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold text-foreground">
+                      {item.title}
+                    </div>
+                    <div className="mt-0.5 truncate text-xs text-muted-foreground">{item.desc}</div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </Reveal>
 
       <AnimatePresence>
         {lightbox && (
@@ -823,16 +856,24 @@ function Gallery() {
             exit={{ opacity: 0 }}
             onClick={() => setLightbox(null)}
           >
-            <motion.img
-              src={lightbox}
-              alt="Büyütülmüş görsel"
-              className="max-h-[85vh] max-w-[90vw] rounded-xl object-contain shadow-2xl"
+            <motion.div
+              className="relative max-h-[88vh] max-w-[92vw] rounded-xl shadow-2xl"
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-            />
+            >
+              <img
+                src={lightbox.src}
+                alt={lightbox.title}
+                className="max-h-[80vh] max-w-[92vw] rounded-xl object-contain"
+              />
+              <div className="mt-3 text-center">
+                <div className="text-lg font-semibold">{lightbox.title}</div>
+                <div className="mt-0.5 text-sm text-muted-foreground">{lightbox.desc}</div>
+              </div>
+            </motion.div>
             <button
               onClick={() => setLightbox(null)}
               className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-card text-foreground shadow-lg transition-colors hover:bg-accent"
@@ -843,45 +884,6 @@ function Gallery() {
         )}
       </AnimatePresence>
     </section>
-  );
-}
-
-function MarqueeRow({
-  images,
-  direction,
-  onImageClick,
-}: {
-  images: string[];
-  direction: "left" | "right";
-  onImageClick: (src: string) => void;
-}) {
-  const [paused, setPaused] = useState(false);
-  const doubled = [...images, ...images];
-
-  return (
-    <div
-      className="group/row flex gap-3"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <div
-        className="flex gap-3"
-        style={{
-          animation: `marquee-${direction} 30s linear infinite`,
-          animationPlayState: paused ? "paused" : "running",
-        }}
-      >
-        {doubled.map((src, i) => (
-          <button
-            key={`${src}-${i}`}
-            onClick={() => onImageClick(src)}
-            className="relative h-48 w-48 shrink-0 overflow-hidden rounded-xl border border-border bg-muted transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:h-56 sm:w-56 md:h-64 md:w-64"
-          >
-            <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
 
