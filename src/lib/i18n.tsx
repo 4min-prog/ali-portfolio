@@ -636,16 +636,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLangState(l);
     localStorage.setItem("lang", l);
     document.documentElement.lang = l;
-    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
   };
 
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   }, [lang]);
 
   const t = translations[lang];
-  const dir = lang === "ar" ? "rtl" : "ltr";
+  const dir = "ltr";
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t, dir }}>
