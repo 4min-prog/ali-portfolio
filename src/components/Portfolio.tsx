@@ -27,6 +27,7 @@ import {
   Award,
   Languages,
   Image,
+  Link2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
@@ -221,10 +222,9 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
-      <LineSidebar dark={dark} toggle={toggle} activeId={activeId} />
-      <MobileTopBar dark={dark} toggle={toggle} />
+      <Header dark={dark} toggle={toggle} activeId={activeId} />
 
-      <div className="lg:pl-16">
+      <div className="px-6 pt-[8.5rem] lg:pt-[8.5rem]">
         <Hero />
         <About />
         <Experience />
@@ -256,9 +256,9 @@ export default function Portfolio() {
   );
 }
 
-/* ---------- Line Sidebar ---------- */
+/* ---------- Header ---------- */
 
-function LineSidebar({
+function Header({
   dark,
   toggle,
   activeId,
@@ -267,204 +267,13 @@ function LineSidebar({
   toggle: () => void;
   activeId: string;
 }) {
-  const [expanded, setExpanded] = useState(false);
-  const [activeLinePos, setActiveLinePos] = useState<number | null>(null);
-  const [hoverLinePos, setHoverLinePos] = useState<number | null>(null);
-  const [showHoverLine, setShowHoverLine] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Record<string, HTMLAnchorElement>>({});
-  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const hoverDelayRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  const getLinePosition = useCallback((id: string) => {
-    const el = itemRefs.current[id];
-    const nav = navRef.current;
-    if (!el || !nav) return null;
-    const navRect = nav.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    return elRect.top - navRect.top + elRect.height / 2 - 8;
-  }, []);
-
+  const [scrolled, setScrolled] = useState(false);
   const { t, lang, setLang } = useLanguage();
   const navItems = NAV_IDS.map((n) => ({
     ...n,
     label: (t.nav as Record<string, string>)[n.id],
   }));
 
-  useEffect(() => {
-    if (activeId) {
-      const pos = getLinePosition(activeId);
-      setActiveLinePos(pos);
-    }
-  }, [activeId, getLinePosition, expanded]);
-
-  const onItemEnter = useCallback(
-    (id: string) => {
-      clearTimeout(hoverTimeoutRef.current);
-      clearTimeout(hoverDelayRef.current);
-      const pos = getLinePosition(id);
-      setHoverLinePos(pos);
-      hoverDelayRef.current = setTimeout(() => setShowHoverLine(true), 120);
-    },
-    [getLinePosition],
-  );
-
-  const onItemLeave = useCallback(() => {
-    clearTimeout(hoverDelayRef.current);
-    hoverTimeoutRef.current = setTimeout(() => {
-      setShowHoverLine(false);
-    }, 80);
-  }, []);
-
-  const onSidebarEnter = useCallback(() => {
-    clearTimeout(hoverTimeoutRef.current);
-    setExpanded(true);
-  }, []);
-
-  const onSidebarLeave = useCallback(() => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setExpanded(false);
-      setShowHoverLine(false);
-    }, 150);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(hoverTimeoutRef.current);
-      clearTimeout(hoverDelayRef.current);
-    };
-  }, []);
-
-  return (
-    <header
-      onMouseEnter={onSidebarEnter}
-      onMouseLeave={onSidebarLeave}
-      className={`fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-border bg-background/85 backdrop-blur transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] lg:flex ${
-        expanded ? "w-44" : "w-16 items-center"
-      }`}
-    >
-      <div className="flex justify-center pt-5">
-        <a
-          href="#top"
-          className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-lg shadow-sm transition-transform duration-200 hover:scale-105"
-        >
-          <img
-            src={dark ? "/logo-dark.png" : "/logo-gold.png"}
-            alt="AE"
-            className="h-[4.5rem] w-[4.5rem] object-contain"
-          />
-        </a>
-      </div>
-
-      <div
-        ref={navRef}
-        className={`relative mt-6 flex flex-1 flex-col gap-0.5 ${
-          expanded ? "items-stretch px-3" : "items-center"
-        }`}
-      >
-        <div
-          className="pointer-events-none absolute left-0 w-0.5 rounded-full bg-foreground transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-          style={{
-            height: 16,
-            transform:
-              activeLinePos !== null ? `translateY(${activeLinePos}px)` : "translateY(-100px)",
-            opacity: activeLinePos !== null ? 1 : 0,
-          }}
-        />
-
-        <div
-          className="pointer-events-none absolute left-0 w-0.5 rounded-full bg-muted-foreground/40 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]"
-          style={{
-            height: 16,
-            transform:
-              hoverLinePos !== null ? `translateY(${hoverLinePos}px)` : "translateY(-100px)",
-            opacity: showHoverLine ? 1 : 0,
-          }}
-        />
-
-        {navItems.map((n) => {
-          const Icon = n.icon;
-          return (
-            <a
-              key={n.id}
-              ref={(el) => {
-                if (el) itemRefs.current[n.id] = el;
-              }}
-              href={`#${n.id}`}
-              onMouseEnter={() => onItemEnter(n.id)}
-              onMouseLeave={onItemLeave}
-              className={`group flex items-center rounded-lg text-sm font-medium transition-all duration-300 ease-out ${
-                expanded ? "h-9 gap-3 pl-5 pr-2" : "h-9 w-9 justify-center"
-              } ${
-                activeId === n.id
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              }`}
-            >
-              <Icon
-                className={`h-4 w-4 shrink-0 transition-transform duration-300 ease-out ${
-                  expanded ? "" : "group-hover:scale-110"
-                }`}
-              />
-              <span
-                className={`whitespace-nowrap transition-all duration-300 ease-out ${
-                  expanded
-                    ? "translate-x-0 opacity-100"
-                    : "pointer-events-none absolute -translate-x-2 opacity-0"
-                }`}
-              >
-                {n.label}
-              </span>
-            </a>
-          );
-        })}
-      </div>
-
-      <div
-        className={`flex flex-col gap-2 px-3 ${expanded ? "items-stretch mb-3" : "items-center mb-3"}`}
-      >
-        <div className={`flex gap-1.5 ${expanded ? "w-full" : "flex-col items-center"}`}>
-          {LANGS.map((l) => (
-            <button
-              key={l.code}
-              onClick={() => setLang(l.code)}
-              aria-label={`${l.label} - ${t.langLabel}`}
-              className={`h-8 shrink-0 rounded-md border text-xs font-semibold transition-colors ${
-                lang === l.code
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
-              } ${expanded ? "flex-1" : "w-8"}`}
-            >
-              {l.label}
-            </button>
-          ))}
-        </div>
-        <div className={`flex gap-2 ${expanded ? "flex-row" : "flex-col items-center"}`}>
-          <button
-            onClick={toggle}
-            aria-label={t.themeLabel}
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
-          >
-            {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-          </button>
-          <a
-            href="#contact"
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-foreground text-background transition-opacity hover:opacity-90"
-            title={t.contactLabel}
-          >
-            <Mail className="h-3.5 w-3.5" />
-          </a>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-/* ---------- Mobile Top Bar ---------- */
-
-function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
-  const [scrolled, setScrolled] = useState(false);
-  const { t, lang, setLang } = useLanguage();
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -474,23 +283,44 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors lg:hidden ${
+      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors ${
         scrolled
           ? "border-border bg-background/85 backdrop-blur"
           : "border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-3 text-sm font-medium">
-          <span className="flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
+      <div className="mx-auto flex h-[8.5rem] max-w-7xl items-center justify-between gap-4 px-6">
+        <a href="#top" className="flex items-center gap-3">
+          <span className="relative flex h-[120px] w-[120px] items-center justify-center rounded-lg">
             <img
               src={dark ? "/logo-dark.png" : "/logo-gold.png"}
               alt="AE"
-              className="h-[3.5rem] w-[3.5rem] object-contain"
+              className="h-[120px] w-[120px] object-contain"
             />
           </span>
-          <span>Ali Elأ¶mer</span>
         </a>
+
+        <nav className="hidden items-center gap-1 lg:flex">
+          {navItems.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                activeId === n.id
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              }`}
+            >
+              {n.label}
+              {activeId === n.id && (
+                <motion.span
+                  layoutId="header-underline"
+                  className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-primary"
+                />
+              )}
+            </a>
+          ))}
+        </nav>
 
         <div className="flex items-center gap-2">
           {LANGS.map((l) => (
@@ -531,7 +361,7 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
 function Hero() {
   const { t } = useLanguage();
   return (
-    <section id="top" className="relative overflow-hidden pt-24 lg:pt-20">
+    <section id="top" className="relative overflow-hidden pt-0 lg:pt-0">
       <SideRays
         speed={1.5}
         rayColor1="#C0AC30"
@@ -579,6 +409,15 @@ function Hero() {
                 >
                   {t.hero.contactBtn}
                   <ArrowUpRight className="h-4 w-4" />
+                </a>
+                <a
+                  href="https://www.linklyhub.com/alialomer"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  <Link2 className="h-4 w-4 text-primary" />
+                  {t.hero.linklyBtn ?? "Tüm Linkler"}
                 </a>
               </div>
             </Reveal>

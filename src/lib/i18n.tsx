@@ -21,6 +21,7 @@ const translations = {
         "Eğitim, idari işler ve tercümanlık alanlarında; öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu bir profesyonel.",
       cvDownload: "CV indir",
       contactBtn: "İletişime geç",
+      linklyBtn: "Tüm Linkler",
       rotatingTexts: ["Tercümanlık", "İdari İşler", "Eğitimcilik", "Sekreterlik"],
       infoKeys: { location: "Konum", field: "Alan", languages: "Diller", status: "Durum" },
       infoValues: {
@@ -208,6 +209,7 @@ const translations = {
         "متخصص في مجالات التعليم والشؤون الإدارية والترجمة؛ منفتح على التعلم، مسؤول، ومتوافق مع العمل الجماعي.",
       cvDownload: "تحميل السيرة الذاتية",
       contactBtn: "تواصل معي",
+      linklyBtn: "كل الروابط",
       rotatingTexts: ["الترجمة", "الشؤون الإدارية", "التعليم", "السكرتارية"],
       infoKeys: { location: "الموقع", field: "التخصص", languages: "اللغات", status: "الحالة" },
       infoValues: {
@@ -395,6 +397,7 @@ const translations = {
         "A professional in education, administrative affairs, and translation; eager to learn, responsible, and adaptable to teamwork.",
       cvDownload: "Download CV",
       contactBtn: "Get in touch",
+      linklyBtn: "All links",
       rotatingTexts: ["Translation", "Administrative", "Education", "Secretarial"],
       infoKeys: { location: "Location", field: "Field", languages: "Languages", status: "Status" },
       infoValues: {
@@ -574,6 +577,7 @@ export type Translations = {
     subtitle: string;
     cvDownload: string;
     contactBtn: string;
+    linklyBtn: string;
     rotatingTexts: string[];
     infoKeys: Record<string, string>;
     infoValues: Record<string, string>;
