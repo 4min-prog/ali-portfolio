@@ -118,6 +118,7 @@ const translations = {
     gallery: {
       index: "05",
       title: "Tasarımlar",
+      hint: "Keşfetmek için kaydır ↓",
       items: [
         { title: "Canva · Afiş", desc: "Tanıtım afişi" },
         { title: "Canva · Kart", desc: "Kartvizit tasarımı" },
@@ -304,6 +305,7 @@ const translations = {
     gallery: {
       index: "٠٥",
       title: "التصاميم",
+      hint: "مرّر للاستكشاف ↓",
       items: [
         { title: "Canva · ملصق", desc: "ملصق تعريفي" },
         { title: "Canva · بطاقة", desc: "تصميم بطاقة عمل" },
@@ -490,6 +492,7 @@ const translations = {
     gallery: {
       index: "05",
       title: "Designs",
+      hint: "Scroll to explore ↓",
       items: [
         { title: "Canva · Poster", desc: "Promotional poster" },
         { title: "Canva · Card", desc: "Business card design" },
@@ -617,6 +620,7 @@ export type Translations = {
   gallery: {
     index: string;
     title: string;
+    hint: string;
     items: { title: string; desc: string }[];
   };
   certificates: {

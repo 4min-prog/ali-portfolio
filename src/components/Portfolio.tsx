@@ -1,5 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  motion,
+  useInView,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useMotionValueEvent,
+} from "framer-motion";
+import type { MotionValue } from "framer-motion";
 import {
   ArrowUpRight,
   Download,
@@ -793,7 +802,7 @@ function Certificates() {
   );
 }
 
-/* ---------- Gallery: large cards with labels ---------- */
+/* ---------- Gallery: sticky full-screen horizontal scroll ---------- */
 
 function Gallery() {
   const [lightbox, setLightbox] = useState<{ src: string; title: string; desc: string } | null>(
@@ -801,51 +810,63 @@ function Gallery() {
   );
   const { t } = useLanguage();
 
-  return (
-    <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
-      <div className="mx-auto mb-12 w-full max-w-6xl px-6">
-        <Reveal>
-          <SectionLabel index={t.gallery.index} title={t.gallery.title} />
-        </Reveal>
-      </div>
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Record<number, HTMLButtonElement | null>>({});
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const [range, setRange] = useState<[number, number]>([0, 0]);
 
-      <Reveal delay={0.05}>
-        <div className="flex gap-5 overflow-x-auto px-6 pb-8 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
+  useLayoutEffect(() => {
+    const measure = () => {
+      const first = cardRefs.current[0];
+      const last = cardRefs.current[GALLERY.length - 1];
+      if (!first || !last) return;
+      const vw2 = window.innerWidth / 2;
+      setRange([
+        vw2 - (first.offsetLeft + first.offsetWidth / 2),
+        vw2 - (last.offsetLeft + last.offsetWidth / 2),
+      ]);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  const trackWidth = useTransform(scrollYProgress, [0, 1], range);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="gallery"
+      className="relative border-t border-border bg-card/40"
+      style={{ height: "350vh" }}
+    >
+      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+        <div className="mx-auto mb-10 w-full max-w-6xl px-6">
+          <SectionLabel index={t.gallery.index} title={t.gallery.title} />
+        </div>
+        <p className="mb-2 text-center text-xs uppercase tracking-[0.25em] text-muted-foreground/60">
+          {t.gallery.hint}
+        </p>
+
+        <motion.div style={{ x: trackWidth }} className="relative flex w-max items-center gap-14">
           {GALLERY.map((src, i) => {
             const item = t.gallery.items[i] ?? { title: "", desc: "" };
             return (
-              <button
+              <GalleryCard
                 key={`${src}-${i}`}
-                onClick={() => setLightbox({ src, title: item.title, desc: item.desc })}
-                className="group w-[16rem] shrink-0 snap-start overflow-hidden rounded-xl border border-border bg-card text-left shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-raised)] sm:w-[19rem] md:w-[22rem]"
-              >
-                <div className="relative h-60 overflow-hidden sm:h-64 md:h-72">
-                  <img
-                    src={src}
-                    alt={item.title}
-                    loading="lazy"
-                    draggable={false}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <span className="absolute left-3 top-3 rounded-md bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
-                    {item.title}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-3 px-4 py-3.5">
-                  <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold text-foreground">
-                      {item.title}
-                    </div>
-                    <div className="mt-0.5 truncate text-xs text-muted-foreground">{item.desc}</div>
-                  </div>
-                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </div>
-              </button>
+                src={src}
+                title={item.title}
+                desc={item.desc}
+                progress={scrollYProgress}
+                refCb={(el) => {
+                  cardRefs.current[i] = el;
+                }}
+                onOpen={() => setLightbox({ src, title: item.title, desc: item.desc })}
+              />
             );
           })}
-        </div>
-      </Reveal>
+        </motion.div>
+      </div>
 
       <AnimatePresence>
         {lightbox && (
@@ -884,6 +905,75 @@ function Gallery() {
         )}
       </AnimatePresence>
     </section>
+  );
+}
+
+/* ---------- Gallery card ---------- */
+
+function GalleryCard({
+  src,
+  title,
+  desc,
+  progress,
+  refCb,
+  onOpen,
+}: {
+  src: string;
+  title: string;
+  desc: string;
+  progress: MotionValue<number>;
+  refCb: (el: HTMLButtonElement | null) => void;
+  onOpen: () => void;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const scale = useMotionValue(0.82);
+  const opacity = useMotionValue(0.5);
+
+  useMotionValueEvent(progress, "change", () => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const center = rect.left + rect.width / 2;
+    const viewportCenter = window.innerWidth / 2;
+    const dist = Math.abs(center - viewportCenter);
+    const maxDist = window.innerWidth / 2 + rect.width / 2;
+    const t = Math.min(dist / maxDist, 1);
+    scale.set(1.18 - 0.36 * t);
+    opacity.set(1 - 0.5 * t);
+    el.style.zIndex = t < 0.05 ? "3" : "0";
+  });
+
+  return (
+    <motion.button
+      ref={(el) => {
+        ref.current = el;
+        refCb(el);
+      }}
+      onClick={onOpen}
+      style={{ scale, opacity }}
+      className="group relative flex h-[60vh] w-[74vw] max-w-[26rem] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[var(--shadow-card)] will-change-transform transition-shadow hover:shadow-[var(--shadow-raised)] sm:w-[22rem] md:w-[26rem]"
+    >
+      <div className="relative flex-1 overflow-hidden">
+        <img
+          src={src}
+          alt={title}
+          loading="lazy"
+          draggable={false}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <span className="absolute left-4 top-4 rounded-md bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
+          {title}
+        </span>
+      </div>
+      <div className="flex items-center justify-between gap-3 px-4 py-3.5">
+        <div className="min-w-0">
+          <div className="truncate text-sm font-semibold text-foreground">{title}</div>
+          <div className="mt-0.5 truncate text-xs text-muted-foreground">{desc}</div>
+        </div>
+        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </div>
+    </motion.button>
   );
 }
 
