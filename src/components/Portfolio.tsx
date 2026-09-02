@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
+import AmbientBackground from "./AmbientBackground";
 import RotatingText from "./RotatingText";
 import { useLanguage, type Lang } from "../lib/i18n";
 
@@ -74,6 +75,49 @@ function useTheme() {
     localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
   return { dark, toggle: () => setDark((v) => !v) };
+}
+
+/* ---------- Intro ---------- */
+
+function Intro({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onDone, 2500);
+    return () => clearTimeout(timer);
+  }, [onDone]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ y: "-100%", opacity: 0 }}
+      transition={{ opacity: { duration: 0.35 } }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_42%,color-mix(in_oklab,var(--color-primary)_22%,transparent),transparent_75%)]" />
+      <motion.div
+        initial={{ scale: 0.6, opacity: 0, rotate: -6 }}
+        animate={{ scale: 1, opacity: 1, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 180, damping: 18 }}
+        className="relative flex h-40 w-40 items-center justify-center"
+      >
+        <motion.span
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.25, duration: 0.6 }}
+          className="absolute inset-0 rounded-full border border-primary/30"
+        />
+        <motion.span
+          initial={{ opacity: 0, scale: 1.4 }}
+          animate={{ opacity: [0, 1, 1], scale: [1.4, 1.15, 1] }}
+          transition={{ delay: 0.45, duration: 1, times: [0, 0.6, 1] }}
+          className="absolute inset-4 rounded-full border border-primary/60"
+        />
+        <span className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-serif text-5xl font-bold tracking-[0.12em] text-transparent sm:text-6xl">
+          ALI
+        </span>
+      </motion.div>
+    </motion.div>
+  );
 }
 
 /* ---------- Primitives ---------- */
@@ -121,6 +165,20 @@ export default function Portfolio() {
   const { dark, toggle } = useTheme();
   const [showTop, setShowTop] = useState(false);
   const [activeId, setActiveId] = useState<string>("about");
+  const [intro, setIntro] = useState(true);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const timer = setTimeout(() => {
+      document.body.style.overflow = prev;
+      setIntro(false);
+    }, 2500);
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = prev;
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 600);
@@ -147,6 +205,7 @@ export default function Portfolio() {
   const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <LineSidebar dark={dark} toggle={toggle} activeId={activeId} />
       <MobileTopBar dark={dark} toggle={toggle} />
 
@@ -467,6 +526,7 @@ function Hero() {
         origin="top-right"
         opacity={0.35}
       />
+      <AmbientBackground />
       <div className="relative z-10 mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-8">
@@ -1182,8 +1242,13 @@ function Footer() {
   const { t } = useLanguage();
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-10 sm:flex-row sm:items-center">
-        <div className="flex items-center gap-3 text-sm">
+      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-3 px-6 py-10 sm:flex-row sm:items-center">
+        <a
+          href="https://4min.netlify.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 text-sm"
+        >
           <span className="relative flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
             <img
               src="/logo-white-sm.png"
@@ -1197,8 +1262,17 @@ function Footer() {
             />
           </span>
           <span className="text-muted-foreground">{t.footer.copyright}</span>
+        </a>
+        <div className="sm:items-end">
+          <a
+            href="https://4min.netlify.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground transition-colors hover:text-primary"
+          >
+            created by 4min
+          </a>
         </div>
-        <div className="text-xs text-muted-foreground">{t.footer.location}</div>
       </div>
     </footer>
   );
