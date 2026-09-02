@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+﻿import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   motion,
   useInView,
@@ -98,22 +98,37 @@ function Intro({ onDone }: { onDone: () => void }) {
         initial={{ scale: 0.6, opacity: 0, rotate: -6 }}
         animate={{ scale: 1, opacity: 1, rotate: 0 }}
         transition={{ type: "spring", stiffness: 180, damping: 18 }}
-        className="relative flex h-40 w-40 items-center justify-center"
+        className="relative flex h-48 w-48 items-center justify-center sm:h-56 sm:w-56"
       >
         <motion.span
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="absolute inset-0 rounded-full border border-primary/30"
+          className="absolute inset-0 rounded-full border border-primary/25"
         />
         <motion.span
           initial={{ opacity: 0, scale: 1.4 }}
-          animate={{ opacity: [0, 1, 1], scale: [1.4, 1.15, 1] }}
+          animate={{ opacity: [0, 1, 1], scale: [1.4, 1.12, 1] }}
           transition={{ delay: 0.45, duration: 1, times: [0, 0.6, 1] }}
-          className="absolute inset-4 rounded-full border border-primary/60"
+          className="absolute inset-5 rounded-full border border-primary/50"
         />
-        <span className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-serif text-5xl font-bold tracking-[0.12em] text-transparent sm:text-6xl">
-          ALI
+        <motion.span
+          initial={{ rotate: 0 }}
+          animate={{ rotate: 360 }}
+          transition={{ delay: 0.6, duration: 9, repeat: Infinity, ease: "linear" }}
+          className="absolute -inset-2 rounded-full border border-dashed border-primary/25"
+        />
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="absolute h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_2px_var(--color-primary)]"
+          style={{ transform: "translateY(-112%)" }}
+        />
+        <span className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-center font-serif text-3xl font-bold leading-tight tracking-[0.08em] text-transparent sm:text-4xl">
+          AL
+          <br />
+          OMAR
         </span>
       </motion.div>
     </motion.div>
@@ -334,7 +349,7 @@ function LineSidebar({
           className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-lg shadow-sm transition-transform duration-200 hover:scale-105"
         >
           <img
-            src={dark ? "/logo-white.png" : "/logo-gold.png"}
+            src={dark ? "/logo-dark.png" : "/logo-gold.png"}
             alt="AE"
             className="h-[4.5rem] w-[4.5rem] object-contain"
           />
@@ -469,12 +484,12 @@ function MobileTopBar({ dark, toggle }: { dark: boolean; toggle: () => void }) {
         <a href="#top" className="flex items-center gap-3 text-sm font-medium">
           <span className="flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
             <img
-              src={dark ? "/logo-white-sm.png" : "/logo-gold.png"}
+              src={dark ? "/logo-dark.png" : "/logo-gold.png"}
               alt="AE"
               className="h-[3.5rem] w-[3.5rem] object-contain"
             />
           </span>
-          <span>Ali Elömer</span>
+          <span>Ali Elأ¶mer</span>
         </a>
 
         <div className="flex items-center gap-2">
@@ -624,7 +639,7 @@ function About() {
             <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-border bg-card">
               <img
                 src="/photos/profile-1.jpg"
-                alt="Ali Elömer"
+                alt="Ali Elأ¶mer"
                 className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
@@ -959,7 +974,7 @@ function Gallery() {
               onClick={() => setLightbox(null)}
               className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-card text-foreground shadow-lg transition-colors hover:bg-accent"
             >
-              ✕
+              âœ•
             </button>
           </motion.div>
         )}
@@ -1251,7 +1266,7 @@ function Footer() {
         >
           <span className="relative flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-md">
             <img
-              src="/logo-white-sm.png"
+              src="/logo-dark.png"
               alt="AE"
               className="absolute h-[3.5rem] w-[3.5rem] object-contain dark:block hidden"
             />
