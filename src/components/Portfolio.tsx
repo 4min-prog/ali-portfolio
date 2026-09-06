@@ -226,7 +226,7 @@ export default function Portfolio() {
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <Header dark={dark} toggle={toggle} activeId={activeId} />
 
-      <div className="px-6 pt-[7.5rem] lg:pt-[7.5rem]">
+      <div className="px-6 pt-24 lg:pt-24">
         <Hero />
         <About />
         <Experience />
@@ -286,35 +286,35 @@ function Header({
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors ${
+      className={`fixed inset-x-0 top-0 z-40 border-b transition-all duration-300 ${
         scrolled
           ? "border-border bg-background/85 backdrop-blur"
           : "border-transparent bg-transparent"
       }`}
     >
       <div
-        className={`mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 transition-[height] duration-300 ${
-          scrolled ? "h-16" : "h-[7.5rem]"
+        className={`mx-auto flex items-center justify-between gap-4 px-6 transition-all duration-300 ${
+          scrolled ? "h-16" : "h-24"
         }`}
       >
-        <a href="#top" className="flex items-center gap-3">
+        <a href="#top" className="flex items-center" aria-label="Ali Elömer — Ana sayfa">
           <span className="relative flex items-center justify-center rounded-lg">
             <img
               src={dark ? "/logo-dark.png" : "/logo-gold.png"}
               alt="AE"
-              className={`object-contain transition-[width,height] duration-300 ${
-                scrolled ? "h-10 w-10" : "h-[120px] w-[120px]"
+              className={`object-contain transition-all duration-300 ${
+                scrolled ? "h-10 w-10" : "h-[96px] w-[96px]"
               }`}
             />
           </span>
         </a>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="flex-1 items-center justify-center gap-1 max-lg:hidden">
           {navItems.map((n) => (
             <a
               key={n.id}
               href={`#${n.id}`}
-              className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              className={`relative mx-0.5 inline-block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                 activeId === n.id
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
