@@ -392,7 +392,7 @@ const translations = {
     },
     hero: {
       badge: "Gaziantep, Turkey · Open to opportunities",
-      name: "Ali Elömer",
+      name: "Ali Al Omar",
       subtitle:
         "A professional in education, administrative affairs, and translation; eager to learn, responsible, and adaptable to teamwork.",
       cvDownload: "Download CV",
