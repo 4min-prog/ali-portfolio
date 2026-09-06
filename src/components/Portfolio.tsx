@@ -293,66 +293,85 @@ function Header({
       }`}
     >
       <div
-        className={`mx-auto flex items-center justify-between gap-4 px-6 transition-all duration-300 ${
+        className={`relative mx-auto flex items-center justify-between gap-4 px-6 transition-all duration-300 ${
           scrolled ? "h-16" : "h-24"
         }`}
       >
-        <a href="#top" className="flex items-center" aria-label="Ali Elömer — Ana sayfa">
-          <span className="relative flex items-center justify-center rounded-lg">
-            <img
-              src={dark ? "/logo-dark.png" : "/logo-gold.png"}
-              alt="AE"
-              className={`object-contain transition-all duration-300 ${
-                scrolled ? "h-10 w-10" : "h-[96px] w-[96px]"
-              }`}
-            />
-          </span>
-        </a>
+        <div className="flex flex-1 items-center gap-10 lg:justify-center">
+          <a href="#top" className="flex items-center" aria-label="Ali Elömer — Ana sayfa">
+            <span className="relative flex items-center justify-center rounded-lg">
+              <img
+                src={dark ? "/logo-dark.png" : "/logo-gold.png"}
+                alt="AE"
+                className={`object-contain transition-all duration-300 ${
+                  scrolled ? "h-10 w-10" : "h-[96px] w-[96px]"
+                }`}
+              />
+            </span>
+          </a>
 
-        <nav className="flex-1 items-center justify-center gap-1 max-lg:hidden">
-          {navItems.map((n) => (
-            <a
-              key={n.id}
-              href={`#${n.id}`}
-              className={`relative mx-0.5 inline-block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                activeId === n.id
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              }`}
-            >
-              {n.label}
-              {activeId === n.id && (
-                <motion.span
-                  layoutId="header-underline"
-                  className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-primary"
-                />
-              )}
-            </a>
-          ))}
-        </nav>
+          <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 lg:hidden">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={`${activeId}-${navItems.find((n) => n.id === activeId)?.label}`}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="block text-sm font-medium text-muted-foreground"
+              >
+                {navItems.find((n) => n.id === activeId)?.label}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+
+          <nav className="flex items-center gap-1 max-lg:hidden">
+            {navItems.map((n) => (
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  activeId === n.id
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                }`}
+              >
+                {n.label}
+                {activeId === n.id && (
+                  <motion.span
+                    layoutId="header-underline"
+                    className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-primary"
+                  />
+                )}
+              </a>
+            ))}
+          </nav>
+        </div>
 
         <div className="flex items-center gap-2">
-          {LANGS.map((l) => (
+          <div className="hidden items-center gap-2 lg:flex">
+            {LANGS.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => setLang(l.code)}
+                aria-label={`${l.label} - ${t.langLabel}`}
+                className={`grid h-8 w-8 place-items-center rounded-md border text-xs font-semibold transition-colors ${
+                  lang === l.code
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
+                }`}
+              >
+                {l.label}
+              </button>
+            ))}
             <button
-              key={l.code}
-              onClick={() => setLang(l.code)}
-              aria-label={`${l.label} - ${t.langLabel}`}
-              className={`grid h-8 w-8 place-items-center rounded-md border text-xs font-semibold transition-colors ${
-                lang === l.code
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
-              }`}
+              onClick={toggle}
+              aria-label={t.themeLabel}
+              className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
             >
-              {l.label}
+              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-          ))}
-          <button
-            onClick={toggle}
-            aria-label={t.themeLabel}
-            className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
-          >
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
+          </div>
           <button
             onClick={() => setMenuOpen((o) => !o)}
             aria-label="Menu"
@@ -395,6 +414,30 @@ function Header({
                   {n.label}
                 </a>
               ))}
+
+              <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
+                {LANGS.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => setLang(l.code)}
+                    aria-label={`${l.label} - ${t.langLabel}`}
+                    className={`grid h-8 w-8 place-items-center rounded-md border text-xs font-semibold transition-colors ${
+                      lang === l.code
+                        ? "border-foreground bg-foreground text-background"
+                        : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
+                    }`}
+                  >
+                    {l.label}
+                  </button>
+                ))}
+                <button
+                  onClick={toggle}
+                  aria-label={t.themeLabel}
+                  className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent"
+                >
+                  {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
           </motion.nav>
         )}
