@@ -28,6 +28,8 @@ import {
   Languages,
   Image,
   Link2,
+  Menu,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
@@ -224,7 +226,7 @@ export default function Portfolio() {
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <Header dark={dark} toggle={toggle} activeId={activeId} />
 
-      <div className="px-6 pt-[8.5rem] lg:pt-[8.5rem]">
+      <div className="px-6 pt-[7.5rem] lg:pt-[7.5rem]">
         <Hero />
         <About />
         <Experience />
@@ -268,6 +270,7 @@ function Header({
   activeId: string;
 }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { t, lang, setLang } = useLanguage();
   const navItems = NAV_IDS.map((n) => ({
     ...n,
@@ -289,13 +292,19 @@ function Header({
           : "border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-[8.5rem] max-w-7xl items-center justify-between gap-4 px-6">
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 transition-[height] duration-300 ${
+          scrolled ? "h-16" : "h-[7.5rem]"
+        }`}
+      >
         <a href="#top" className="flex items-center gap-3">
-          <span className="relative flex h-[120px] w-[120px] items-center justify-center rounded-lg">
+          <span className="relative flex items-center justify-center rounded-lg">
             <img
               src={dark ? "/logo-dark.png" : "/logo-gold.png"}
               alt="AE"
-              className="h-[120px] w-[120px] object-contain"
+              className={`object-contain transition-[width,height] duration-300 ${
+                scrolled ? "h-10 w-10" : "h-[120px] w-[120px]"
+              }`}
             />
           </span>
         </a>
@@ -344,14 +353,52 @@ function Header({
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Menu"
+            className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card transition-colors hover:bg-accent lg:hidden"
+          >
+            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
           <a
             href="#contact"
-            className="inline-flex h-8 items-center rounded-md bg-foreground px-3 text-xs font-medium text-background transition-opacity hover:opacity-90"
+            onClick={() => setMenuOpen(false)}
+            className="hidden h-8 items-center rounded-md bg-foreground px-3 text-xs font-medium text-background transition-opacity hover:opacity-90 lg:inline-flex"
           >
             {t.contactLabel}
           </a>
         </div>
       </div>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden border-t border-border bg-background/95 backdrop-blur lg:hidden"
+          >
+            <div className="mx-auto max-w-7xl px-6 py-3">
+              {navItems.map((n) => (
+                <a
+                  key={n.id}
+                  href={`#${n.id}`}
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+                    activeId === n.id
+                      ? "bg-accent text-foreground"
+                      : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                  }`}
+                >
+                  <n.icon className="h-4 w-4" />
+                  {n.label}
+                </a>
+              ))}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
@@ -770,7 +817,6 @@ function Gallery() {
                 key={`${src}-${i}`}
                 src={src}
                 title={item.title}
-                desc={item.desc}
                 progress={scrollYProgress}
                 refCb={(el) => {
                   cardRefs.current[i] = el;
@@ -827,14 +873,12 @@ function Gallery() {
 function GalleryCard({
   src,
   title,
-  desc,
   progress,
   refCb,
   onOpen,
 }: {
   src: string;
   title: string;
-  desc: string;
   progress: MotionValue<number>;
   refCb: (el: HTMLButtonElement | null) => void;
   onOpen: () => void;
@@ -876,16 +920,6 @@ function GalleryCard({
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        <span className="absolute left-4 top-4 rounded-md bg-background/80 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
-          {title}
-        </span>
-      </div>
-      <div className="flex items-center justify-between gap-3 px-4 py-3.5">
-        <div className="min-w-0">
-          <div className="truncate text-sm font-semibold text-foreground">{title}</div>
-          <div className="mt-0.5 truncate text-xs text-muted-foreground">{desc}</div>
-        </div>
-        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       </div>
     </motion.button>
   );
