@@ -34,7 +34,7 @@ const translations = {
         experience: "Deneyim",
         experienceVal: "3+ yıl",
         certificates: "Sertifika",
-        certificatesVal: "4",
+        certificatesVal: "6",
         languages: "Dil",
         languagesVal: "2",
         field: "Alan",
@@ -135,8 +135,18 @@ const translations = {
       index: "06",
       title: "Sertifikalar",
       heading: "Online eğitim sertifikaları.",
-      count: "4 sertifika",
+      count: "6 sertifika",
       items: [
+        {
+          title: "Computer Essentials",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Computer_Essentials.pdf",
+        },
+        {
+          title: "أسساس الحاسوب",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Computing_Basics.pdf",
+        },
         {
           title: "Excel Temel Beceriler",
           issuer: "Online Eğitim",
@@ -222,7 +232,7 @@ const translations = {
         experience: "الخبرة",
         experienceVal: "+٣ سنوات",
         certificates: "الشهادات",
-        certificatesVal: "٤",
+        certificatesVal: "٦",
         languages: "اللغات",
         languagesVal: "٢",
         field: "التخصص",
@@ -323,8 +333,18 @@ const translations = {
       index: "٠٦",
       title: "الشهادات",
       heading: "شهادات التعليم عبر الإنترنت.",
-      count: "٤ شهادات",
+      count: "٦ شهادات",
       items: [
+        {
+          title: "Computer Essentials",
+          issuer: "إدراك",
+          pdf: "/certificates/Edraak_Computer_Essentials.pdf",
+        },
+        {
+          title: "أسساس الحاسوب",
+          issuer: "إدراك",
+          pdf: "/certificates/Edraak_Computing_Basics.pdf",
+        },
         {
           title: "مهارات Excel الأساسية",
           issuer: "تعليم عبر الإنترنت",
@@ -410,7 +430,7 @@ const translations = {
         experience: "Experience",
         experienceVal: "3+ years",
         certificates: "Certificates",
-        certificatesVal: "4",
+        certificatesVal: "6",
         languages: "Languages",
         languagesVal: "2",
         field: "Field",
@@ -511,8 +531,18 @@ const translations = {
       index: "06",
       title: "Certificates",
       heading: "Online education certificates.",
-      count: "4 certificates",
+      count: "6 certificates",
       items: [
+        {
+          title: "Computer Essentials",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Computer_Essentials.pdf",
+        },
+        {
+          title: "Computing Basics",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Computing_Basics.pdf",
+        },
         {
           title: "Excel Basic Skills",
           issuer: "Online Education",
