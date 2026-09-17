@@ -138,12 +138,12 @@ const translations = {
       count: "6 sertifika",
       items: [
         {
-          title: "Computer Essentials",
+          title: "Bilgisayar Temelleri",
           issuer: "Edraak",
           pdf: "/certificates/Edraak_Computer_Essentials.pdf",
         },
         {
-          title: "أسساس الحاسوب",
+          title: "Bilgisayar Esasları",
           issuer: "Edraak",
           pdf: "/certificates/Edraak_Computing_Basics.pdf",
         },
@@ -336,12 +336,12 @@ const translations = {
       count: "٦ شهادات",
       items: [
         {
-          title: "Computer Essentials",
+          title: "أساسيات الحاسوب",
           issuer: "إدراك",
           pdf: "/certificates/Edraak_Computer_Essentials.pdf",
         },
         {
-          title: "أسساس الحاسوب",
+          title: "مهارات الحاسوب",
           issuer: "إدراك",
           pdf: "/certificates/Edraak_Computing_Basics.pdf",
         },
