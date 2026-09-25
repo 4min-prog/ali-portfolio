@@ -761,7 +761,8 @@ function Skills() {
 /* ---------- Certificates: minimal list ---------- */
 
 function Certificates() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const animName = lang === "ar" ? "marquee-right" : "marquee-left";
   return (
     <section id="certificates" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
@@ -778,43 +779,44 @@ function Certificates() {
           </div>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {t.certificates.items.map((c, i) => (
-            <Reveal key={c.title} delay={i * 0.05}>
-              <a
-                href={c.pdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:bg-accent"
-              >
-                {c.img && (
+        <div className="marquee-pause mt-12 overflow-hidden">
+          <div
+            className="marquee-track flex w-max gap-4"
+            style={{ animation: `${animName} 45s linear infinite` }}
+          >
+            {[...t.certificates.items, ...t.certificates.items].map((c, i) => (
+              <div key={`${c.pdf}-${i}`} className="w-[280px] shrink-0 sm:w-[320px]">
+                <a
+                  href={c.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/card flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:bg-accent"
+                >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
                       src={c.img}
                       alt={c.title}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover/card:opacity-100" />
                   </div>
-                )}
-                <div className="flex flex-1 items-center justify-between gap-4 p-6">
-                  <div>
-                    <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                      {c.issuer}
+                  <div className="flex flex-1 items-center justify-between gap-4 p-5">
+                    <div>
+                      <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                        {c.issuer}
+                      </div>
+                      <h3 className="mt-2 text-base font-semibold tracking-tight">{c.title}</h3>
                     </div>
-                    <h3 className="mt-2 text-lg font-semibold tracking-tight">{c.title}</h3>
-                  </div>
-                  {c.img ? (
-                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-4 py-2 text-xs font-medium text-primary transition-colors group-hover:bg-primary/20">
+                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition-colors group-hover/card:bg-primary/20">
                       <Download className="h-3.5 w-3.5" />
                       PDF
                     </span>
-                  ) : null}
-                </div>
-              </a>
-            </Reveal>
-          ))}
+                  </div>
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

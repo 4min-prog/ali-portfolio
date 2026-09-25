@@ -34,7 +34,7 @@ const translations = {
         experience: "Deneyim",
         experienceVal: "3+ yıl",
         certificates: "Sertifika",
-        certificatesVal: "6",
+        certificatesVal: "8",
         languages: "Dil",
         languagesVal: "2",
         field: "Alan",
@@ -135,7 +135,7 @@ const translations = {
       index: "06",
       title: "Sertifikalar",
       heading: "Online eğitim sertifikaları.",
-      count: "6 sertifika",
+      count: "8 sertifika",
       items: [
         {
           title: "Bilgisayar Temelleri",
@@ -148,6 +148,18 @@ const translations = {
           issuer: "Edraak",
           pdf: "/certificates/Edraak_Computing_Basics.pdf",
           img: "/cert-images/Edraak_Computing_Basics.jpg",
+        },
+        {
+          title: "İnternet ve E-posta Temelleri",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Internet_Email_Essentials.pdf",
+          img: "/cert-images/Edraak_Internet_Email_Essentials.jpg",
+        },
+        {
+          title: "İnternet ve E-posta Esasları",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Internet_Email_Basics.pdf",
+          img: "/cert-images/Edraak_Internet_Email_Basics.jpg",
         },
         {
           title: "Excel Temel Beceriler",
@@ -238,7 +250,7 @@ const translations = {
         experience: "الخبرة",
         experienceVal: "+٣ سنوات",
         certificates: "الشهادات",
-        certificatesVal: "٦",
+        certificatesVal: "٨",
         languages: "اللغات",
         languagesVal: "٢",
         field: "التخصص",
@@ -339,7 +351,7 @@ const translations = {
       index: "٠٦",
       title: "الشهادات",
       heading: "شهادات التعليم عبر الإنترنت.",
-      count: "٦ شهادات",
+      count: "٨ شهادات",
       items: [
         {
           title: "أساسيات الحاسوب",
@@ -352,6 +364,18 @@ const translations = {
           issuer: "إدراك",
           pdf: "/certificates/Edraak_Computing_Basics.pdf",
           img: "/cert-images/Edraak_Computing_Basics.jpg",
+        },
+        {
+          title: "أساسيات الإنترنت والبريد الإلكتروني",
+          issuer: "إدراك",
+          pdf: "/certificates/Edraak_Internet_Email_Essentials.pdf",
+          img: "/cert-images/Edraak_Internet_Email_Essentials.jpg",
+        },
+        {
+          title: "مهارات الإنترنت والبريد الإلكتروني",
+          issuer: "إدراك",
+          pdf: "/certificates/Edraak_Internet_Email_Basics.pdf",
+          img: "/cert-images/Edraak_Internet_Email_Basics.jpg",
         },
         {
           title: "مهارات Excel الأساسية",
@@ -442,7 +466,7 @@ const translations = {
         experience: "Experience",
         experienceVal: "3+ years",
         certificates: "Certificates",
-        certificatesVal: "6",
+        certificatesVal: "8",
         languages: "Languages",
         languagesVal: "2",
         field: "Field",
@@ -543,7 +567,7 @@ const translations = {
       index: "06",
       title: "Certificates",
       heading: "Online education certificates.",
-      count: "6 certificates",
+      count: "8 certificates",
       items: [
         {
           title: "Computer Essentials",
@@ -556,6 +580,18 @@ const translations = {
           issuer: "Edraak",
           pdf: "/certificates/Edraak_Computing_Basics.pdf",
           img: "/cert-images/Edraak_Computing_Basics.jpg",
+        },
+        {
+          title: "Internet and Email Essentials",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Internet_Email_Essentials.pdf",
+          img: "/cert-images/Edraak_Internet_Email_Essentials.jpg",
+        },
+        {
+          title: "Internet and Email Basics",
+          issuer: "Edraak",
+          pdf: "/certificates/Edraak_Internet_Email_Basics.pdf",
+          img: "/cert-images/Edraak_Internet_Email_Basics.jpg",
         },
         {
           title: "Excel Basic Skills",
