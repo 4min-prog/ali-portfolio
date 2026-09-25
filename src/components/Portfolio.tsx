@@ -446,6 +446,84 @@ function Header({
   );
 }
 
+/* ---------- Hero certificate slider ---------- */
+
+function HeroCertificateSlider() {
+  const { t } = useLanguage();
+  const [idx, setIdx] = useState(0);
+  const items = t.certificates.items;
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused || items.length === 0) return;
+    const id = setInterval(() => setIdx((v) => (v + 1) % items.length), 3500);
+    return () => clearInterval(id);
+  }, [paused, items.length]);
+
+  return (
+    <div
+      className="relative flex h-[460px] flex-col"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex items-center justify-between border-b border-border px-6 py-4">
+        <div className="text-xs uppercase tracking-widest text-muted-foreground">
+          {t.hero.infoKeys.field} · {t.hero.infoValues.field}
+        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/10 px-2.5 py-1 text-[11px] font-medium text-secondary">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary" />
+          {t.hero.infoValues.status}
+        </span>
+      </div>
+
+      <div className="relative flex-1 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.a
+            key={`${idx}-${items[idx]?.pdf}`}
+            href={items[idx]?.pdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -60 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="flex h-full w-full flex-col"
+          >
+            <div className="relative flex-1 overflow-hidden bg-accent">
+              <img
+                src={items[idx]?.img}
+                alt={items[idx]?.title}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-3 border-t border-border px-6 py-4">
+              <div>
+                <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                  {items[idx]?.issuer}
+                </div>
+                <div className="mt-1 text-sm font-semibold tracking-tight">{items[idx]?.title}</div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {items.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setIdx(i)}
+                    aria-label={`Slide ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === idx ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.a>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Hero ---------- */
 
 function Hero() {
@@ -515,20 +593,8 @@ function Hero() {
 
           <div className="md:col-span-4">
             <Reveal delay={0.2}>
-              <aside className="rounded-xl border border-border bg-card p-6">
-                <dl className="divide-y divide-border">
-                  {[
-                    { k: t.hero.infoKeys.location, v: t.hero.infoValues.location },
-                    { k: t.hero.infoKeys.field, v: t.hero.infoValues.field },
-                    { k: t.hero.infoKeys.languages, v: t.hero.infoValues.languages },
-                    { k: t.hero.infoKeys.status, v: t.hero.infoValues.status },
-                  ].map((r) => (
-                    <div key={r.k} className="flex items-center justify-between py-3 text-sm">
-                      <dt className="text-muted-foreground">{r.k}</dt>
-                      <dd className="font-medium">{r.v}</dd>
-                    </div>
-                  ))}
-                </dl>
+              <aside className="overflow-hidden rounded-xl border border-border bg-card">
+                <HeroCertificateSlider />
               </aside>
             </Reveal>
           </div>
