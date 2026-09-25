@@ -151,21 +151,25 @@ const translations = {
           title: "Excel Temel Beceriler",
           issuer: "Online Eğitim",
           pdf: "/certificates/Microsoft_Excel_Temelleri_Sertifika (ali).pdf",
+          img: "/photos/cert-excel-1.jpg",
         },
         {
           title: "PowerPoint Temel Beceriler",
           issuer: "Online Eğitim",
           pdf: "/certificates/Microsoft_PowerPoint_Sertifika.pdf",
+          img: "/photos/cert-powerpoint-1.jpg",
         },
         {
           title: "Word Temel Beceriler",
           issuer: "Online Eğitim",
           pdf: "/certificates/Microsoft_Word_Temelleri_Sertifika..ali el omer.pdf",
+          img: "/photos/cert-word-1.jpg",
         },
         {
           title: "Canva Uygulamalı",
           issuer: "Online Eğitim",
           pdf: "/certificates/Uygulamal%C4%B1_Canva_Sertifika%20(ali).pdf",
+          img: "/photos/cert-canva-1.jpg",
         },
       ],
     },
@@ -349,21 +353,25 @@ const translations = {
           title: "مهارات Excel الأساسية",
           issuer: "تعليم عبر الإنترنت",
           pdf: "/certificates/Microsoft_Excel_Temelleri_Sertifika (ali).pdf",
+          img: "/photos/cert-excel-1.jpg",
         },
         {
           title: "مهارات PowerPoint الأساسية",
           issuer: "تعليم عبر الإنترنت",
           pdf: "/certificates/Microsoft_PowerPoint_Sertifika.pdf",
+          img: "/photos/cert-powerpoint-1.jpg",
         },
         {
           title: "مهارات Word الأساسية",
           issuer: "تعليم عبر الإنترنت",
           pdf: "/certificates/Microsoft_Word_Temelleri_Sertifika..ali el omer.pdf",
+          img: "/photos/cert-word-1.jpg",
         },
         {
           title: "Canva التطبيقي",
           issuer: "تعليم عبر الإنترنت",
           pdf: "/certificates/Uygulamal%C4%B1_Canva_Sertifika%20(ali).pdf",
+          img: "/photos/cert-canva-1.jpg",
         },
       ],
     },
@@ -547,21 +555,25 @@ const translations = {
           title: "Excel Basic Skills",
           issuer: "Online Education",
           pdf: "/certificates/Microsoft_Excel_Temelleri_Sertifika (ali).pdf",
+          img: "/photos/cert-excel-1.jpg",
         },
         {
           title: "PowerPoint Basic Skills",
           issuer: "Online Education",
           pdf: "/certificates/Microsoft_PowerPoint_Sertifika.pdf",
+          img: "/photos/cert-powerpoint-1.jpg",
         },
         {
           title: "Word Basic Skills",
           issuer: "Online Education",
           pdf: "/certificates/Microsoft_Word_Temelleri_Sertifika..ali el omer.pdf",
+          img: "/photos/cert-word-1.jpg",
         },
         {
           title: "Canva Applied",
           issuer: "Online Education",
           pdf: "/certificates/Uygulamal%C4%B1_Canva_Sertifika%20(ali).pdf",
+          img: "/photos/cert-canva-1.jpg",
         },
       ],
     },
@@ -662,7 +674,7 @@ export type Translations = {
     title: string;
     heading: string;
     count: string;
-    items: { title: string; issuer: string; pdf: string }[];
+    items: { title: string; issuer: string; pdf: string; img?: string }[];
   };
   languagesSection: {
     index: string;

@@ -781,23 +781,38 @@ function Certificates() {
         <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
           {t.certificates.items.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.05}>
-              <article className="flex items-center justify-between rounded-xl border border-border bg-card p-6 transition-colors hover:bg-accent">
-                <div>
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                    {c.issuer}
+              <a
+                href={c.pdf}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:bg-accent"
+              >
+                {c.img && (
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={c.img}
+                      alt={c.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   </div>
-                  <h3 className="mt-2 text-lg font-semibold tracking-tight">{c.title}</h3>
+                )}
+                <div className="flex flex-1 items-center justify-between gap-4 p-6">
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                      {c.issuer}
+                    </div>
+                    <h3 className="mt-2 text-lg font-semibold tracking-tight">{c.title}</h3>
+                  </div>
+                  {c.img ? (
+                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-4 py-2 text-xs font-medium text-primary transition-colors group-hover:bg-primary/20">
+                      <Download className="h-3.5 w-3.5" />
+                      PDF
+                    </span>
+                  ) : null}
                 </div>
-                <a
-                  href={c.pdf}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ml-4 inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-4 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  PDF
-                </a>
-              </article>
+              </a>
             </Reveal>
           ))}
         </div>
