@@ -34,6 +34,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
 import AmbientBackground from "./AmbientBackground";
+import CursorGrid from "./CursorGrid";
 import RotatingText from "./RotatingText";
 import { useLanguage, type Lang } from "../lib/i18n";
 
@@ -223,10 +224,28 @@ export default function Portfolio() {
   const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
+        <CursorGrid
+          className="cursor-grid--background"
+          cellSize={72}
+          color="#C0AC30"
+          radius={150}
+          falloff="smooth"
+          holdTime={350}
+          fadeDuration={900}
+          lineWidth={1.1}
+          maxOpacity={0.55}
+          fillOpacity={0}
+          gridOpacity={0}
+          cellRadius={0}
+          clickPulse
+          pulseSpeed={650}
+        />
+      </div>
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <Header dark={dark} toggle={toggle} activeId={activeId} />
 
-      <div className="px-6 pt-24 lg:pt-24">
+      <div className="relative z-10 px-6 pt-24 lg:pt-24">
         <Hero />
         <About />
         <Experience />
@@ -298,7 +317,15 @@ function Header({
         }`}
       >
         <div className="flex flex-1 items-center gap-10 lg:justify-center">
-          <a href="#top" className="flex items-center" aria-label="Ali Elömer — Ana sayfa">
+          <a
+            href="#top"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className="flex items-center"
+            aria-label="Ali Elömer — Ana sayfa"
+          >
             <span className="relative flex items-center justify-center rounded-lg">
               <img
                 src={dark ? "/logo-dark.png" : "/logo-gold.png"}
@@ -446,84 +473,6 @@ function Header({
   );
 }
 
-/* ---------- Hero certificate slider ---------- */
-
-function HeroCertificateSlider() {
-  const { t } = useLanguage();
-  const [idx, setIdx] = useState(0);
-  const items = t.certificates.items;
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || items.length === 0) return;
-    const id = setInterval(() => setIdx((v) => (v + 1) % items.length), 3500);
-    return () => clearInterval(id);
-  }, [paused, items.length]);
-
-  return (
-    <div
-      className="relative flex h-[460px] flex-col"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <div className="flex items-center justify-between border-b border-border px-6 py-4">
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">
-          {t.hero.infoKeys.field} · {t.hero.infoValues.field}
-        </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/10 px-2.5 py-1 text-[11px] font-medium text-secondary">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary" />
-          {t.hero.infoValues.status}
-        </span>
-      </div>
-
-      <div className="relative flex-1 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.a
-            key={`${idx}-${items[idx]?.pdf}`}
-            href={items[idx]?.pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -60 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
-            className="flex h-full w-full flex-col"
-          >
-            <div className="relative flex-1 overflow-hidden bg-accent">
-              <img
-                src={items[idx]?.img}
-                alt={items[idx]?.title}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-3 border-t border-border px-6 py-4">
-              <div>
-                <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
-                  {items[idx]?.issuer}
-                </div>
-                <div className="mt-1 text-sm font-semibold tracking-tight">{items[idx]?.title}</div>
-              </div>
-              <div className="flex items-center gap-1.5">
-                {items.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setIdx(i)}
-                    aria-label={`Slide ${i + 1}`}
-                    className={`h-1.5 rounded-full transition-all ${
-                      i === idx ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </motion.a>
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-}
-
 /* ---------- Hero ---------- */
 
 function Hero() {
@@ -541,63 +490,47 @@ function Hero() {
       />
       <AmbientBackground />
       <div className="relative z-10 mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
-          <div className="md:col-span-8">
-            <Reveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-                <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                {t.hero.badge}
-              </div>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h1 className="mt-8 text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
-                {t.hero.name}
-                <br />
-                <RotatingText />
-              </h1>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                {t.hero.subtitle}
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <div className="mt-10 flex flex-wrap items-center gap-3">
-                <a
-                  href="/cv-ali-elomer.pdf"
-                  download
-                  className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                >
-                  <Download className="h-4 w-4" />
-                  {t.hero.cvDownload}
-                </a>
-                <a
-                  href="#contact"
-                  className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
-                >
-                  {t.hero.contactBtn}
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
-                <a
-                  href="https://www.linklyhub.com/alialomer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
-                >
-                  <Link2 className="h-4 w-4 text-primary" />
-                  {t.hero.linklyBtn ?? "Tüm Linkler"}
-                </a>
-              </div>
-            </Reveal>
-          </div>
-
-          <div className="md:col-span-4">
-            <Reveal delay={0.2}>
-              <aside className="overflow-hidden rounded-xl border border-border bg-card">
-                <HeroCertificateSlider />
-              </aside>
-            </Reveal>
-          </div>
+        <div className="max-w-3xl">
+          <Reveal>
+            <h1 className="text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
+              {t.hero.name}
+              <br />
+              <RotatingText />
+            </h1>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              {t.hero.subtitle}
+            </p>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <a
+                href="/cv-ali-elomer.pdf"
+                download
+                className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                <Download className="h-4 w-4" />
+                {t.hero.cvDownload}
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
+              >
+                {t.hero.contactBtn}
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.linklyhub.com/alialomer"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
+              >
+                <Link2 className="h-4 w-4 text-primary" />
+                {t.hero.linklyBtn ?? "Tüm Linkler"}
+              </a>
+            </div>
+          </Reveal>
         </div>
 
         <Reveal delay={0.25}>

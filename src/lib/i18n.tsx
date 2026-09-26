@@ -15,7 +15,7 @@ const translations = {
       contact: "İletişim",
     },
     hero: {
-      badge: "Gaziantep, Türkiye · Fırsatlara açık",
+      badge: "",
       name: "Ali Elömer",
       subtitle:
         "Eğitim, idari işler ve tercümanlık alanlarında; öğrenmeye açık, sorumluluk sahibi ve ekip çalışmasına uyumlu bir profesyonel.",
@@ -231,7 +231,7 @@ const translations = {
       contact: "التواصل",
     },
     hero: {
-      badge: "غازي عنتاب، تركيا · مفتوح للفرص",
+      badge: "",
       name: "علي العمر",
       subtitle:
         "متخصص في مجالات التعليم والشؤون الإدارية والترجمة؛ منفتح على التعلم، مسؤول، ومتوافق مع العمل الجماعي.",
@@ -447,7 +447,7 @@ const translations = {
       contact: "Contact",
     },
     hero: {
-      badge: "Gaziantep, Turkey · Open to opportunities",
+      badge: "",
       name: "Ali Al Omar",
       subtitle:
         "A professional in education, administrative affairs, and translation; eager to learn, responsible, and adaptable to teamwork.",
