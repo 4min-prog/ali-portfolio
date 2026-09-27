@@ -84,9 +84,11 @@ function useTheme() {
 
 function Intro({ onDone }: { onDone: () => void }) {
   useEffect(() => {
-    const timer = setTimeout(onDone, 2500);
+    const timer = setTimeout(onDone, 3500);
     return () => clearTimeout(timer);
   }, [onDone]);
+
+  const chars = "PORTFOLIO".split("");
 
   return (
     <motion.div
@@ -98,41 +100,44 @@ function Intro({ onDone }: { onDone: () => void }) {
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_42%,color-mix(in_oklab,var(--color-primary)_22%,transparent),transparent_75%)]" />
       <motion.div
-        initial={{ scale: 0.6, opacity: 0, rotate: -6 }}
-        animate={{ scale: 1, opacity: 1, rotate: 0 }}
-        transition={{ type: "spring", stiffness: 180, damping: 18 }}
-        className="relative flex h-48 w-48 items-center justify-center sm:h-56 sm:w-56"
+        initial={{ x: 28, opacity: 0, filter: "blur(14px)" }}
+        animate={{ x: 0, opacity: 1, filter: "blur(0px)" }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+        className="relative flex items-center gap-[0.12em] sm:gap-1"
       >
-        <motion.span
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.25, duration: 0.6 }}
-          className="absolute inset-0 rounded-full border border-primary/25"
-        />
-        <motion.span
-          initial={{ opacity: 0, scale: 1.4 }}
-          animate={{ opacity: [0, 1, 1], scale: [1.4, 1.12, 1] }}
-          transition={{ delay: 0.45, duration: 1, times: [0, 0.6, 1] }}
-          className="absolute inset-5 rounded-full border border-primary/50"
-        />
-        <motion.span
-          initial={{ rotate: 0 }}
-          animate={{ rotate: 360 }}
-          transition={{ delay: 0.6, duration: 9, repeat: Infinity, ease: "linear" }}
-          className="absolute -inset-2 rounded-full border border-dashed border-primary/25"
-        />
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
-          className="absolute h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_2px_var(--color-primary)]"
-          style={{ transform: "translateY(-112%)" }}
-        />
-        <span className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-center font-serif text-3xl font-bold leading-tight tracking-[0.08em] text-transparent sm:text-4xl">
-          AL
-          <br />
-          OMAR
-        </span>
+        {chars.map((ch, i) => (
+          <motion.span
+            key={i}
+            className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-serif text-5xl font-bold leading-none tracking-[0.22em] text-transparent sm:text-7xl"
+            initial={{ opacity: 0, y: -26, rotateX: -60, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
+            transition={{
+              delay: 0.5 + i * 0.075,
+              duration: 0.85,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            {ch}
+          </motion.span>
+        ))}
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute bottom-[18%] overflow-hidden"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2.4, duration: 0.7 }}
+      >
+        <div className="flex gap-6">
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              className="h-px w-10 bg-primary/60 sm:w-14"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ delay: 2.45 + i * 0.08, duration: 0.45, ease: "easeOut" }}
+            />
+          ))}
+        </div>
       </motion.div>
     </motion.div>
   );
@@ -191,7 +196,7 @@ export default function Portfolio() {
     const timer = setTimeout(() => {
       document.body.style.overflow = prev;
       setIntro(false);
-    }, 2500);
+    }, 3500);
     return () => {
       clearTimeout(timer);
       document.body.style.overflow = prev;
@@ -496,7 +501,7 @@ function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[calc(100svh-6rem)] flex-col items-center justify-center overflow-hidden pt-0 text-center lg:pt-0"
+      className="relative flex -mt-24 min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-0 text-center lg:-mt-24 lg:pt-0"
     >
       <SideRays
         speed={1.5}
@@ -511,7 +516,7 @@ function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6">
         <div className="mx-auto max-w-3xl">
           <Reveal>
-            <h1 className="text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
+            <h1 className="text-[3.25rem] font-semibold leading-[1.05] tracking-tight sm:text-7xl md:text-[5rem]">
               {t.hero.name}
               <br />
               <RotatingText />
