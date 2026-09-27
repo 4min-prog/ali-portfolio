@@ -121,6 +121,8 @@ const translations = {
       title: "Tasarımlar",
       hint: "Keşfetmek için kaydır ↓",
       items: [
+        { title: "Logo · Altın", desc: "Marka logotipi" },
+        { title: "Logo · Bordo", desc: "Marka logotipi" },
         { title: "Canva · Afiş", desc: "Tanıtım afişi" },
         { title: "Canva · Kart", desc: "Kartvizit tasarımı" },
         { title: "Sunum Kapağı", desc: "PowerPoint kapağı" },
@@ -337,6 +339,8 @@ const translations = {
       title: "التصاميم",
       hint: "مرّر للاستكشاف ↓",
       items: [
+        { title: "شعار · ذهبي", desc: "شعار العلامة" },
+        { title: "شعار · عنابي", desc: "شعار العلامة" },
         { title: "Canva · ملصق", desc: "ملصق تعريفي" },
         { title: "Canva · بطاقة", desc: "تصميم بطاقة عمل" },
         { title: "غلاف عرض", desc: "غلاف PowerPoint" },
@@ -553,6 +557,8 @@ const translations = {
       title: "Designs",
       hint: "Scroll to explore ↓",
       items: [
+        { title: "Logo · Gold", desc: "Brand logotype" },
+        { title: "Logo · Bordeaux", desc: "Brand logotype" },
         { title: "Canva · Poster", desc: "Promotional poster" },
         { title: "Canva · Card", desc: "Business card design" },
         { title: "Slide Cover", desc: "PowerPoint cover" },

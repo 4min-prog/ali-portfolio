@@ -1,14 +1,5 @@
-﻿import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  motion,
-  useInView,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-  useMotionValue,
-  useMotionValueEvent,
-} from "framer-motion";
-import type { MotionValue } from "framer-motion";
+﻿import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ArrowUpRight,
   Download,
@@ -35,6 +26,12 @@ import type { LucideIcon } from "lucide-react";
 import SideRays from "./SideRays";
 import AmbientBackground from "./AmbientBackground";
 import CursorGrid from "./CursorGrid";
+import GooeyNav from "./GooeyNav";
+import MoltenMetal from "./MoltenMetal";
+import ScrollReveal from "./ScrollReveal";
+import FlexCarousel from "./FlexCarousel";
+import MorphSlider from "./MorphSlider";
+import DriftWall from "./DriftWall";
 import RotatingText from "./RotatingText";
 import { useLanguage, type Lang } from "../lib/i18n";
 
@@ -50,6 +47,8 @@ const NAV_IDS: { id: string; icon: LucideIcon }[] = [
 ];
 
 const GALLERY = [
+  "/photos/design-logo-gold.png",
+  "/photos/design-logo-bordo.png",
   "/photos/cert-canva-1.jpg",
   "/photos/cert-canva-2.jpg",
   "/photos/cert-powerpoint-1.jpg",
@@ -225,6 +224,25 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
+        <MoltenMetal
+          className="molten-metal-backdrop"
+          color1="#2A1408"
+          color2="#C0AC30"
+          color3="#FFF3C4"
+          speed={0.2}
+          scale={4}
+          detail={3}
+          glow={1.5}
+          coreSize={0.08}
+          swirl={0.8}
+          fold={-0.2}
+          blackPoint={0.34}
+          brightness={1.1}
+          colorMode="molten"
+          grain={false}
+          mouseInteraction={false}
+          opacity={0.4}
+        />
         <CursorGrid
           className="cursor-grid--background"
           cellSize={72}
@@ -353,25 +371,21 @@ function Header({
           </span>
 
           <nav className="flex items-center gap-1 max-lg:hidden">
-            {navItems.map((n) => (
-              <a
-                key={n.id}
-                href={`#${n.id}`}
-                className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                  activeId === n.id
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                }`}
-              >
-                {n.label}
-                {activeId === n.id && (
-                  <motion.span
-                    layoutId="header-underline"
-                    className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-primary"
-                  />
-                )}
-              </a>
-            ))}
+            <GooeyNav
+              items={navItems.map((n) => ({ label: n.label, href: `#${n.id}` }))}
+              activeIndex={Math.max(
+                0,
+                navItems.findIndex((n) => n.id === activeId),
+              )}
+              initialActiveIndex={Math.max(
+                0,
+                navItems.findIndex((n) => n.id === activeId),
+              )}
+              className="gooey-nav--header"
+              particleCount={12}
+              particleDistances={[60, 8]}
+              particleR={80}
+            />
           </nav>
         </div>
 
@@ -532,22 +546,6 @@ function Hero() {
             </div>
           </Reveal>
         </div>
-
-        <Reveal delay={0.25}>
-          <div className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
-            {[
-              { k: t.hero.stats.experience, v: t.hero.stats.experienceVal },
-              { k: t.hero.stats.certificates, v: t.hero.stats.certificatesVal },
-              { k: t.hero.stats.languages, v: t.hero.stats.languagesVal },
-              { k: t.hero.stats.field, v: t.hero.stats.fieldVal },
-            ].map((s) => (
-              <div key={s.k} className="bg-card p-6">
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{s.k}</div>
-                <div className="mt-2 text-2xl font-semibold tracking-tight">{s.v}</div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
       </div>
     </section>
   );
@@ -574,16 +572,16 @@ function About() {
             </div>
           </Reveal>
           <div className="space-y-8 md:col-span-7">
-            <Reveal delay={0.08}>
-              <h2 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl">
-                {t.about.heading.split("\n").map((line, i) => (
-                  <span key={i}>
-                    {line}
-                    {i < t.about.heading.split("\n").length - 1 && <br />}
-                  </span>
-                ))}
-              </h2>
-            </Reveal>
+            <ScrollReveal
+              baseOpacity={0}
+              enableBlur
+              baseRotation={4}
+              blurStrength={8}
+              containerClassName="mt-0"
+              textClassName="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl"
+            >
+              {t.about.heading.replace(/\n/g, " ")}
+            </ScrollReveal>
             <Reveal delay={0.12}>
               <p className="text-base leading-[1.75] text-foreground/85 sm:text-lg">{t.about.p1}</p>
             </Reveal>
@@ -757,11 +755,21 @@ function Skills() {
   );
 }
 
-/* ---------- Certificates: minimal list ---------- */
+/* ---------- Certificates: morphing photo slider ---------- */
 
 function Certificates() {
-  const { t, lang } = useLanguage();
-  const animName = lang === "ar" ? "marquee-right" : "marquee-left";
+  const { t } = useLanguage();
+  const items = useMemo(
+    () =>
+      t.certificates.items
+        .filter((c): c is typeof c & { img: string } => Boolean(c.img))
+        .map((c, i) => ({
+          image: c.img,
+          caption: t.certificates.items[i]?.title,
+        })),
+    [t],
+  );
+
   return (
     <section id="certificates" className="scroll-mt-24 py-28">
       <div className="mx-auto max-w-6xl px-6">
@@ -778,51 +786,34 @@ function Certificates() {
           </div>
         </Reveal>
 
-        <div className="marquee-pause mt-12 overflow-hidden">
-          <div
-            className="marquee-track flex w-max gap-4"
-            style={{ animation: `${animName} 45s linear infinite` }}
-          >
-            {[...t.certificates.items, ...t.certificates.items].map((c, i) => (
-              <div key={`${c.pdf}-${i}`} className="w-[280px] shrink-0 sm:w-[320px]">
-                <a
-                  href={c.pdf}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group/card flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:bg-accent"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={c.img}
-                      alt={c.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover/card:opacity-100" />
-                  </div>
-                  <div className="flex flex-1 items-center justify-between gap-4 p-5">
-                    <div>
-                      <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                        {c.issuer}
-                      </div>
-                      <h3 className="mt-2 text-base font-semibold tracking-tight">{c.title}</h3>
-                    </div>
-                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition-colors group-hover/card:bg-primary/20">
-                      <Download className="h-3.5 w-3.5" />
-                      PDF
-                    </span>
-                  </div>
-                </a>
-              </div>
-            ))}
+        <Reveal delay={0.1} className="mt-12">
+          <div className="relative h-[420px] w-full sm:h-[520px]">
+            <MorphSlider
+              items={items}
+              transition="melt"
+              intensity={0.55}
+              aberration={0.35}
+              drift={0.4}
+              radius={16}
+              autoplay
+              autoplayDelay={4}
+              loop
+              showCaptions={false}
+              showControls={false}
+              showIndicators={false}
+              onSlideClick={(i) => {
+                const c = t.certificates.items[i];
+                if (c) window.open(c.pdf, "_blank", "noopener,noreferrer");
+              }}
+            />
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
 }
 
-/* ---------- Gallery: sticky full-screen horizontal scroll ---------- */
+/* ---------- Gallery: 3D drifting tile wall ---------- */
 
 function Gallery() {
   const [lightbox, setLightbox] = useState<{ src: string; title: string; desc: string } | null>(
@@ -830,61 +821,57 @@ function Gallery() {
   );
   const { t } = useLanguage();
 
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<Record<number, HTMLButtonElement | null>>({});
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const [range, setRange] = useState<[number, number]>([0, 0]);
-
-  useLayoutEffect(() => {
-    const measure = () => {
-      const first = cardRefs.current[0];
-      const last = cardRefs.current[GALLERY.length - 1];
-      if (!first || !last) return;
-      const vw2 = window.innerWidth / 2;
-      setRange([
-        vw2 - (first.offsetLeft + first.offsetWidth / 2),
-        vw2 - (last.offsetLeft + last.offsetWidth / 2),
-      ]);
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
-
-  const trackWidth = useTransform(scrollYProgress, [0, 1], range);
+  const items = useMemo(
+    () =>
+      GALLERY.map((src, i) => {
+        const item = t.gallery.items[i] ?? { title: "", desc: "" };
+        return {
+          image: src,
+          title: item.title,
+          desc: item.desc,
+        };
+      }),
+    [t],
+  );
 
   return (
-    <section
-      ref={sectionRef}
-      id="gallery"
-      className="relative border-t border-border bg-card/40"
-      style={{ height: "350vh" }}
-    >
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
-        <div className="mx-auto mb-10 w-full max-w-6xl px-6">
+    <section id="gallery" className="scroll-mt-24 border-t border-border bg-card/40 py-28">
+      <div className="mx-auto w-full max-w-6xl px-6">
+        <Reveal>
           <SectionLabel index={t.gallery.index} title={t.gallery.title} />
-        </div>
-        <p className="mb-2 text-center text-xs uppercase tracking-[0.25em] text-muted-foreground/60">
+        </Reveal>
+        <p className="mt-2 text-center text-xs uppercase tracking-[0.25em] text-muted-foreground/60">
           {t.gallery.hint}
         </p>
 
-        <motion.div style={{ x: trackWidth }} className="relative flex w-max items-center gap-14">
-          {GALLERY.map((src, i) => {
-            const item = t.gallery.items[i] ?? { title: "", desc: "" };
-            return (
-              <GalleryCard
-                key={`${src}-${i}`}
-                src={src}
-                title={item.title}
-                progress={scrollYProgress}
-                refCb={(el) => {
-                  cardRefs.current[i] = el;
-                }}
-                onOpen={() => setLightbox({ src, title: item.title, desc: item.desc })}
-              />
-            );
-          })}
-        </motion.div>
+        <Reveal className="mt-10" delay={0.1}>
+          <div className="relative h-[480px] w-full sm:h-[560px]">
+            <DriftWall
+              items={items}
+              columns={4}
+              tileWidth={212}
+              tileHeight={140}
+              gap={16}
+              radius={16}
+              tilt={16}
+              turn={-14}
+              perspective={1100}
+              depth={110}
+              speed={34}
+              variance={0.5}
+              parallax={0.7}
+              lift={64}
+              fade={0.62}
+              dim={0.5}
+              overlayColor="#060010"
+              onTileClick={(item, id) => {
+                const i = Number(id.split("-")[2] ?? 0);
+                const meta = t.gallery.items[i] ?? { title: "", desc: "" };
+                setLightbox({ src: item.image, title: meta.title, desc: meta.desc });
+              }}
+            />
+          </div>
+        </Reveal>
       </div>
 
       <AnimatePresence>
@@ -918,69 +905,12 @@ function Gallery() {
               onClick={() => setLightbox(null)}
               className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-card text-foreground shadow-lg transition-colors hover:bg-accent"
             >
-              âœ•
+              ✕
             </button>
           </motion.div>
         )}
       </AnimatePresence>
     </section>
-  );
-}
-
-/* ---------- Gallery card ---------- */
-
-function GalleryCard({
-  src,
-  title,
-  progress,
-  refCb,
-  onOpen,
-}: {
-  src: string;
-  title: string;
-  progress: MotionValue<number>;
-  refCb: (el: HTMLButtonElement | null) => void;
-  onOpen: () => void;
-}) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const scale = useMotionValue(0.82);
-  const opacity = useMotionValue(0.5);
-
-  useMotionValueEvent(progress, "change", () => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const center = rect.left + rect.width / 2;
-    const viewportCenter = window.innerWidth / 2;
-    const dist = Math.abs(center - viewportCenter);
-    const maxDist = window.innerWidth / 2 + rect.width / 2;
-    const t = Math.min(dist / maxDist, 1);
-    scale.set(1.18 - 0.36 * t);
-    opacity.set(1 - 0.5 * t);
-    el.style.zIndex = t < 0.05 ? "3" : "0";
-  });
-
-  return (
-    <motion.button
-      ref={(el) => {
-        ref.current = el;
-        refCb(el);
-      }}
-      onClick={onOpen}
-      style={{ scale, opacity }}
-      className="group relative flex h-[60vh] w-[74vw] max-w-[26rem] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[var(--shadow-card)] will-change-transform transition-shadow hover:shadow-[var(--shadow-raised)] sm:w-[22rem] md:w-[26rem]"
-    >
-      <div className="relative flex-1 overflow-hidden">
-        <img
-          src={src}
-          alt={title}
-          loading="lazy"
-          draggable={false}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      </div>
-    </motion.button>
   );
 }
 
