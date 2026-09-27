@@ -92,6 +92,7 @@ const DriftWall = ({
   const pointerRef = useRef({ x: 0, y: 0 });
   const pointerDampedRef = useRef({ x: 0, y: 0 });
   const lastTsRef = useRef<number | null>(null);
+  const inViewRef = useRef(true);
 
   const [containerHeight, setContainerHeight] = useState(600);
   const [activeId, setActiveId] = useState<string | undefined>(undefined);
@@ -156,7 +157,24 @@ const DriftWall = ({
   );
 
   useEffect(() => {
+    if (!containerRef.current) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+      },
+      { threshold: 0 },
+    );
+    io.observe(containerRef.current);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
     const animate = (ts: number) => {
+      rafRef.current = requestAnimationFrame(animate);
+      if (!inViewRef.current) {
+        lastTsRef.current = null;
+        return;
+      }
       if (lastTsRef.current === null) lastTsRef.current = ts;
       const dt = Math.min(0.05, Math.max(0, ts - (lastTsRef.current ?? 0)) / 1000);
       lastTsRef.current = ts;
@@ -194,8 +212,6 @@ const DriftWall = ({
             el.style.transform = `translate3d(0, ${-(offsetsRef.current[c] ?? 0)}px, 0)`;
         }
       }
-
-      rafRef.current = requestAnimationFrame(animate);
     };
 
     rafRef.current = requestAnimationFrame(animate);

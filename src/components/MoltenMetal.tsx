@@ -24,6 +24,8 @@ type MoltenMetalProps = {
   opacity?: number;
   backgroundColor?: string;
   lightMode?: boolean;
+  maxDpr?: number;
+  targetFps?: number;
   className?: string;
 };
 
@@ -177,6 +179,8 @@ const MoltenMetal = ({
   opacity = 1.0,
   backgroundColor = "#FFFFFF",
   lightMode = false,
+  maxDpr = 2,
+  targetFps = 60,
   className = "",
 }: MoltenMetalProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -190,7 +194,7 @@ const MoltenMetal = ({
       alpha: true,
       premultipliedAlpha: true,
       antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
+      dpr: Math.min(window.devicePixelRatio || 1, maxDpr),
     });
 
     const gl = renderer.gl;
@@ -270,14 +274,19 @@ const MoltenMetal = ({
     let isPageVisible = !document.hidden;
     const t0 = performance.now();
 
+    const frameInterval = targetFps > 0 ? 1000 / targetFps : 0;
+    let lastRender = 0;
+
     const loop = (t: number) => {
+      raf = requestAnimationFrame(loop);
+      if (frameInterval > 0 && t - lastRender < frameInterval) return;
+      lastRender = t;
       program.uniforms.iTime.value = (t - t0) * 0.001;
       currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
       currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
       program.uniforms.uMouse.value[0] = currentMouse[0];
       program.uniforms.uMouse.value[1] = currentMouse[1];
       renderer.render({ scene: mesh });
-      raf = requestAnimationFrame(loop);
     };
 
     const tryStart = () => {

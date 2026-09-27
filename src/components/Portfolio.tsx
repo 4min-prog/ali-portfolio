@@ -242,6 +242,8 @@ export default function Portfolio() {
           grain={false}
           mouseInteraction={false}
           opacity={0.4}
+          maxDpr={1.5}
+          targetFps={30}
         />
         <CursorGrid
           className="cursor-grid--background"
@@ -492,7 +494,10 @@ function Header({
 function Hero() {
   const { t } = useLanguage();
   return (
-    <section id="top" className="relative overflow-hidden pt-0 lg:pt-0">
+    <section
+      id="top"
+      className="relative flex min-h-[calc(100svh-6rem)] flex-col items-center justify-center overflow-hidden pt-0 text-center lg:pt-0"
+    >
       <SideRays
         speed={1.5}
         rayColor1="#C0AC30"
@@ -503,8 +508,8 @@ function Hero() {
         opacity={0.35}
       />
       <AmbientBackground />
-      <div className="relative z-10 mx-auto max-w-6xl px-6">
-        <div className="max-w-3xl">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-6">
+        <div className="mx-auto max-w-3xl">
           <Reveal>
             <h1 className="text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-[4.25rem]">
               {t.hero.name}
@@ -513,12 +518,12 @@ function Hero() {
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
               {t.hero.subtitle}
             </p>
           </Reveal>
           <Reveal delay={0.15}>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <a
                 href="/cv-ali-elomer.pdf"
                 download

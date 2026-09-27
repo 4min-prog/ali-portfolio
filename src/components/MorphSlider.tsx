@@ -291,6 +291,8 @@ class MorphEngine {
 
   boundContextLost: (e: Event) => void;
   resizeObserver: ResizeObserver;
+  io: IntersectionObserver | null = null;
+  isVisible = true;
   raf = 0;
 
   constructor(
@@ -370,6 +372,14 @@ class MorphEngine {
     this.resizeObserver.observe(container);
     this.resize();
 
+    this.io = new IntersectionObserver(
+      ([entry]) => {
+        this.isVisible = entry.isIntersecting;
+      },
+      { threshold: 0 },
+    );
+    this.io.observe(container);
+
     this.loadTextures();
 
     this.raf = requestAnimationFrame(() => {
@@ -415,10 +425,11 @@ class MorphEngine {
   }
 
   loop(t: number) {
+    this.raf = requestAnimationFrame(() => this.loop(performance.now()));
+    if (!this.isVisible) return;
     this.program.uniforms.uTime.value = t * 0.001;
     if (!this.dragging && !this.animating) this.syncOptions();
     this.renderer.render({ scene: this.mesh });
-    this.raf = requestAnimationFrame(() => this.loop(performance.now()));
   }
 
   wrap(i: number) {
@@ -555,6 +566,7 @@ class MorphEngine {
     cancelAnimationFrame(this.raf);
     if (this.tween) this.tween.kill();
     this.resizeObserver.disconnect();
+    if (this.io) this.io.disconnect();
     this.canvas.removeEventListener("webglcontextlost", this.boundContextLost);
     this.textures.forEach((tex) => {
       if (tex && tex.texture) this.gl.deleteTexture(tex.texture);

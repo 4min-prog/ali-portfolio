@@ -266,8 +266,14 @@ const CursorGrid = ({
       wake();
     };
 
+    const isCoarsePointer = () =>
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches;
+
     const onPointerDown = (e: PointerEvent) => {
       if (!propsRef.current.clickPulse) return;
+      if (e.pointerType === "touch" || isCoarsePointer()) return;
       const [x, y] = toLocal(e);
       pulses.push({ x, y, t0: performance.now() });
       wake();
