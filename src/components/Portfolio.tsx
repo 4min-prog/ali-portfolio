@@ -804,7 +804,7 @@ function Certificates() {
               autoplayDelay={4}
               loop
               showCaptions={false}
-              showControls={false}
+              showControls
               showIndicators={false}
               onSlideClick={(i) => {
                 const c = t.certificates.items[i];
