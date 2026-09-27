@@ -605,6 +605,11 @@ export default function MorphSlider({
   const engineRef = useRef<MorphEngine | null>(null);
   const [index, setIndex] = useState(startIndex);
   const [hovering, setHovering] = useState(false);
+  const clickIndexRef = useRef(startIndex);
+
+  useEffect(() => {
+    clickIndexRef.current = index;
+  }, [index]);
 
   const optsRef = useRef<MorphOptions>({
     transition,
@@ -670,8 +675,6 @@ export default function MorphSlider({
     let width = 1;
     let active = false;
     let moved = false;
-    const indexRef = { current: startIndex };
-    indexRef.current = index;
 
     const onDown = (e: PointerEvent) => {
       const rect = el.getBoundingClientRect();
@@ -698,7 +701,7 @@ export default function MorphSlider({
       if (!active) return;
       active = false;
       engineRef.current?.endDrag();
-      if (!moved && onSlideClick) onSlideClick(indexRef.current);
+      if (!moved && onSlideClick) onSlideClick(clickIndexRef.current);
     };
 
     el.addEventListener("pointerdown", onDown);
